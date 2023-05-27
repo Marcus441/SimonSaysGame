@@ -10,7 +10,7 @@ typedef enum{
     users_turn
 
 } GAMESTATE;
-uint16_t sequence_length;
+uint16_t sequence_length = 0;
 
 int main(void) {
     uart_init();
