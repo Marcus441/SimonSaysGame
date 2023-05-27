@@ -1,7 +1,8 @@
 #include "headers.h"
+#include "buzzer.h"
+#include "spi.h"
 
-
-volatile uint8_t pb_state = 0xFF;
+volatile uint8_t pb_debounced;
 
 void buttons_init() {
     // Enable pull-up resistors for PBs
@@ -22,18 +23,17 @@ void buttons_init() {
 // Timer ISR; samples pushbuttons
 ISR(TCB0_INT_vect) {
     
-    static uint8_t count0 = 0;
-    static uint8_t count1 = 0;
-    uint8_t pb_sample = PORTA.IN; // Sample PB state
-    uint8_t pb_changed = pb_sample ^ pb_state; // Detect change to PB state
-    // Increment if PB state changed, reset otherwise
-    count1 = (count1 ^ count0) & pb_changed;
-    count0 = ~count0 & pb_changed;
-    // Update PB state immediately on falling edge or if PB high for three samples
-    pb_state ^= (count1 & count0) | (pb_changed & pb_state); //
-    uint8_t pb_state_r = pb_state;
+    static uint8_t vcount0=0, vcount1=0;   //vertical counter bits
+     
+    uint8_t pb_sample = PORTA.IN;
 
-    uint8_t pb_falling = pb_changed & ~pb_state;
-    
+    uint8_t pb_changed = (pb_sample ^ pb_debounced);
+
+    //vertical counter update
+    vcount1 = (vcount1 ^ vcount0) & pb_changed;  //vcount1 (bit 1 of vertical counter)
+    vcount0 = ~vcount0 & pb_changed;             //vcount0 (bit 0 of vertical counter)
+
+    pb_debounced ^= (vcount0 & vcount1);         //toggle pb_debounced
     TCB0.INTFLAGS = TCB_CAPT_bm;        // Acknowledge interrupt
+
 }
