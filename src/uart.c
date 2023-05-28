@@ -1,8 +1,7 @@
-#include <avr/io.h>
-#include <stdint.h>
+#include "headers.h"
 
 void uart_init(void) {
-    PORTB.DIRSET = PIN2_bm; // Enable PB2 as output (USART0 TXD)
+    PORTB.DIRSET |= PIN2_bm; // Enable PB2 as output (USART0 TXD)
     USART0.BAUD = 1389;     // 9600 baud @ 3.3 MHz
     USART0.CTRLB = USART_RXEN_bm | USART_TXEN_bm;   // Enable Tx/Rx
 }
@@ -22,4 +21,9 @@ void uart_puts(char* string) {
         uart_putc(*string);
         string++;
     }
+}
+
+void println(char* string) {
+    uart_puts(string);
+    uart_putc(10);
 }

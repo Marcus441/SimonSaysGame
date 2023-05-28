@@ -1,6 +1,4 @@
 #include "headers.h"
-#include "buzzer.h"
-#include "spi.h"
 
 volatile uint8_t pb_debounced;
 
@@ -14,13 +12,13 @@ void buttons_init() {
     // Configure timer for PB sampling
     cli();
     TCB0.CTRLB = TCB_CNTMODE_INT_gc;    // Configure TCB0 in periodic interrupt mode
-    TCB0.CCMP = 33333;                  // Set interval for 1ms (3333 clocks @ 3.3 MHz)
+    TCB0.CCMP = 3333;                   // Set interval for 1ms (3333 clocks @ 3.3 MHz)
     TCB0.INTCTRL = TCB_CAPT_bm;         // CAPT interrupt enable
-    TCB0.CTRLA = TCB_ENABLE_bm;        // Enable
+    TCB0.CTRLA = TCB_ENABLE_bm;         // Enable
     sei(); 
 }
 
-// Timer ISR; samples pushbuttons
+//Timer ISR; samples pushbuttons
 ISR(TCB0_INT_vect) {
     
     static uint8_t vcount0=0, vcount1=0;   //vertical counter bits
