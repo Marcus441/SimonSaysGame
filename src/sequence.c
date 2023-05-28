@@ -56,27 +56,32 @@ uint8_t runSequence(uint16_t sequenceLength){
                 if (pb_falling & PIN4_bm)
                 {
                     pb = PB1;
+                    play_tone(0);
                     println("PB1 Pressed");
                 } 
                 else if (pb_falling & PIN5_bm)
                 {
                     pb = PB2;
+                    play_tone(1);
                     println("PB2 Pressed");;                    
                 }
                 else if (pb_falling & PIN6_bm)
                 {
                     pb = PB3;
+                    play_tone(2);
                     println("PB3 Pressed");
                 }  
                 else if (pb_falling & PIN7_bm)
                 {
                     pb = PB4;
+                    play_tone(3);
                     println("PB4 Pressed");
                 }
                 break;
             case PB1:
                 spi_write(segs[0]);
                 if (pb_rising & PIN4_bm){
+                    tone_stop();
                     if(step == 0){
                         pb = Success;
                         println("PB1 Correct");
@@ -89,6 +94,7 @@ uint8_t runSequence(uint16_t sequenceLength){
             case PB2:
                 spi_write(segs[1]);
                 if (pb_rising & PIN5_bm){
+                    tone_stop();
                     if(step == 1){
                         pb = Success;
                         println("PB2 Correct");
@@ -101,6 +107,7 @@ uint8_t runSequence(uint16_t sequenceLength){
             case PB3:
                 spi_write(segs[2]);
                 if (pb_rising & PIN6_bm){
+                    tone_stop();
                     if(step == 2){
                         pb = Success;
                         println("PB3 Correct");
@@ -113,6 +120,7 @@ uint8_t runSequence(uint16_t sequenceLength){
             case PB4:
                 spi_write(segs[3]);
                 if (pb_rising & PIN7_bm){
+                    tone_stop();
                     if(step == 3){
                         pb = Success;
                         println("PB4 Correct");
@@ -159,9 +167,10 @@ void generate_sequence(uint16_t sequenceLength){
         // uart_putc(step+48);
         // play_tone(step);
         _delay_ms(250);
+        play_tone(step);
         spi_write(segs[step]);
         _delay_ms(500);
         spi_write(0xFF);
+        tone_stop();
     }
-    // tone_stop();
 }
