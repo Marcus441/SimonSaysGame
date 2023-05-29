@@ -1,11 +1,13 @@
 #include "headers.h"
-#include "uart.h"
 
-static FILE mystdout = FDEV_SETUP_STREAM(uart_putc_printf, NULL, _FDEV_SETUP_WRITE);
+int uart_putc_printf(char c, FILE *stream);
+
 
 void uart_init(void)
 {
+    static FILE mystdout = FDEV_SETUP_STREAM(uart_putc_printf, NULL, _FDEV_SETUP_WRITE);
     stdout = &mystdout;
+
     PORTB.DIRSET |= PIN2_bm;                      // Enable PB2 as output (USART0 TXD)
     USART0.BAUD = 1389;                           // 9600 baud @ 3.3 MHz
     USART0.CTRLB = USART_RXEN_bm | USART_TXEN_bm; // Enable Tx/Rx
@@ -30,3 +32,5 @@ int uart_putc_printf(char c, FILE *stream)
     uart_putc(c);
     return 0;
 }
+
+

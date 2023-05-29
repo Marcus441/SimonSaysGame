@@ -1,8 +1,5 @@
 #include "headers.h"
-#define T1 8971
-#define T2 10668
-#define T3 6720
-#define T4 17941
+
 
 int tones[] = {
     T1, T2, T3, T4};

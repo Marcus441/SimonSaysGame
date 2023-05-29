@@ -1,7 +1,10 @@
-#include "timer.h"
 #include "buttons.h"
-extern volatile uint8_t pb_debounced;
+#include "spi.h"
 
+
+
+extern volatile uint8_t pb_debounced;
+extern uint8_t segs[];
 // Timer ISR; samples pushbuttons
 ISR(TCB0_INT_vect)
 {
@@ -17,6 +20,14 @@ ISR(TCB0_INT_vect)
     vcount0 = ~vcount0 & pb_changed;            // vcount0 (bit 0 of vertical counter)
 
     pb_debounced ^= (vcount0 & vcount1); // toggle pb_debounced
+
+    static int digit = 0;
+    if (digit) {
+        spi_write(segs[0] | (0x01 << 7));
+    } else {
+        spi_write(segs[1]);
+    }
+    digit = !digit;
     TCB0.INTFLAGS = TCB_CAPT_bm;         // Acknowledge interrupt
 
 }
