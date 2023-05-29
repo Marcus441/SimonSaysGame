@@ -17,28 +17,33 @@ int main(void) {
     spi_init();
     buttons_init();
     buzzer_init();
-    println("Game Start");
+
+    printf("Game Start\n");
     GAMESTATE state = sequence_start;
-    uint8_t outcome;
+    
+    bool outcome;
     uint16_t sequence_length = 0;
+
     char stringarr[100];
+
     while(1) {
         switch (state){
             case sequence_start:
                 
                 sprintf(stringarr, "Sequence of length %d", sequence_length);
                 println(stringarr);
+                
                 generate_sequence(sequence_length);
                 state = users_turn;
                 println("Users Turn");
                 break;
             case users_turn:
                 outcome = runSequence(sequence_length);
-                if (outcome == 1)
+                if (outcome)
                 {
                     state = success;
                     println("State = Success");
-                } else if(outcome == 0){
+                } else if(outcome == false){
                     state = failed;
                     println("State = Failed");
                 }

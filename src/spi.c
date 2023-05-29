@@ -1,4 +1,9 @@
 #include "headers.h"
+
+
+
+
+
 uint8_t segs [] = {
     0xBE, 0xEB, 0x3E, 0x6B
 };

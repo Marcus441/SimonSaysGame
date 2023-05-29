@@ -30,7 +30,7 @@ uint8_t generate_step(uint32_t *state){
     return *state & 0b11;
 }
 
-uint8_t runSequence(uint16_t sequenceLength){
+bool runSequence(uint16_t sequenceLength){
     uint32_t lfsr_state = seed;
     uint8_t step = generate_step(&lfsr_state);
     uint16_t count=0;
@@ -136,7 +136,7 @@ uint8_t runSequence(uint16_t sequenceLength){
                     _delay_ms(500);
                     spi_write(0xFF);
                     println("success state");
-                    return 1;
+                    return true;
                 }else
                 {
                     count++;
@@ -148,7 +148,7 @@ uint8_t runSequence(uint16_t sequenceLength){
             case Fail:
 
                 seed = lfsr_state;
-                return 0;
+                return false;
 
             default: 
                 pb = Delay;
@@ -156,16 +156,13 @@ uint8_t runSequence(uint16_t sequenceLength){
         }
 
     }
-    return 1;
+    return true;
 }
 
 void generate_sequence(uint16_t sequenceLength){
     uint32_t lfsr_state = seed;
     for(uint16_t i=0; i <= sequenceLength; i++){
         uint8_t step = generate_step(&lfsr_state);
-        // if(i!=0){uart_puts("\n");}
-        // uart_putc(step+48);
-        // play_tone(step);
         _delay_ms(250);
         play_tone(step);
         spi_write(segs[step]);
