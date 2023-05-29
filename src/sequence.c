@@ -4,7 +4,7 @@
 #include "buzzer.h"
 #include "buttons.h"
 
-typedef enum 
+typedef enum
 {
     PB1,
     PB2,
@@ -19,23 +19,26 @@ uint32_t seed = SID;
 
 extern volatile uint8_t pb_debounced;
 
-uint8_t generate_step(uint32_t *state){
-    
+uint8_t generate_step(uint32_t *state)
+{
+
     uint8_t bit = *state & 1;
     *state >>= 1;
 
-    if (bit == 1){
+    if (bit == 1)
+    {
         *state ^= MASK;
     }
     return *state & 0b11;
 }
 
-bool runSequence(uint16_t sequenceLength){
+bool runSequence(uint16_t sequenceLength)
+{
     uint32_t lfsr_state = seed;
     uint8_t step = generate_step(&lfsr_state);
-    uint16_t count=0;
+    uint16_t count = 0;
 
-    GAMESTATES pb= Delay;
+    GAMESTATES pb = Delay;
 
     uint8_t pb_sample = 0xFF;
     uint8_t pb_sample_r = 0xFF;
@@ -50,118 +53,139 @@ bool runSequence(uint16_t sequenceLength){
         pb_falling = pb_changed & pb_sample_r;
         pb_rising = pb_changed & pb_sample;
 
-        switch(pb){
-            case Delay:
+        switch (pb)
+        {
+        case Delay:
+            spi_write(0xFF);
+            if (pb_falling & PIN4_bm)
+            {
+                pb = PB1;
+                play_tone(0);
+                printf("PB1 Pressed\n");
+            }
+            else if (pb_falling & PIN5_bm)
+            {
+                pb = PB2;
+                play_tone(1);
+                printf("PB2 Pressed\n");
+                ;
+            }
+            else if (pb_falling & PIN6_bm)
+            {
+                pb = PB3;
+                play_tone(2);
+                printf("PB3 Pressed\n");
+            }
+            else if (pb_falling & PIN7_bm)
+            {
+                pb = PB4;
+                play_tone(3);
+                printf("PB4 Pressed\n");
+            }
+            break;
+        case PB1:
+            spi_write(segs[0]);
+            if (pb_rising & PIN4_bm)
+            {
+                tone_stop();
+                if (step == 0)
+                {
+                    pb = Success;
+                    printf("PB1 Correct\n");
+                }
+                else
+                {
+                    pb = Fail;
+                    printf("PB1 Incorrect\n");
+                }
+            }
+            break;
+        case PB2:
+            spi_write(segs[1]);
+            if (pb_rising & PIN5_bm)
+            {
+                tone_stop();
+                if (step == 1)
+                {
+                    pb = Success;
+                    printf("PB2 Correct\n");
+                }
+                else
+                {
+                    pb = Fail;
+                    printf("PB2 Incorrect\n");
+                }
+            }
+            break;
+        case PB3:
+            spi_write(segs[2]);
+            if (pb_rising & PIN6_bm)
+            {
+                tone_stop();
+                if (step == 2)
+                {
+                    pb = Success;
+                    printf("PB3 Correct\n");
+                }
+                else
+                {
+                    pb = Fail;
+                    printf("PB3 Incorrect\n");
+                }
+            }
+            break;
+        case PB4:
+            spi_write(segs[3]);
+            if (pb_rising & PIN7_bm)
+            {
+                tone_stop();
+                if (step == 3)
+                {
+                    pb = Success;
+                    printf("PB4 Correct\n");
+                }
+                else
+                {
+                    pb = Fail;
+                    printf("PB4 Incorrect\n");
+                }
+            }
+            break;
+        case Success:
+            if (sequenceLength == count)
+            {
+                spi_write(0x00);
+                _delay_ms(500);
                 spi_write(0xFF);
-                if (pb_falling & PIN4_bm)
-                {
-                    pb = PB1;
-                    play_tone(0);
-                    println("PB1 Pressed");
-                } 
-                else if (pb_falling & PIN5_bm)
-                {
-                    pb = PB2;
-                    play_tone(1);
-                    println("PB2 Pressed");;                    
-                }
-                else if (pb_falling & PIN6_bm)
-                {
-                    pb = PB3;
-                    play_tone(2);
-                    println("PB3 Pressed");
-                }  
-                else if (pb_falling & PIN7_bm)
-                {
-                    pb = PB4;
-                    play_tone(3);
-                    println("PB4 Pressed");
-                }
-                break;
-            case PB1:
-                spi_write(segs[0]);
-                if (pb_rising & PIN4_bm){
-                    tone_stop();
-                    if(step == 0){
-                        pb = Success;
-                        println("PB1 Correct");
-                    } else {
-                        pb = Fail;
-                        println("PB1 Incorrect");
-                    }
-                }
-                break;
-            case PB2:
-                spi_write(segs[1]);
-                if (pb_rising & PIN5_bm){
-                    tone_stop();
-                    if(step == 1){
-                        pb = Success;
-                        println("PB2 Correct");
-                    } else {
-                        pb = Fail;
-                        println("PB2 Incorrect");
-                    }
-                }
-                break;
-            case PB3:
-                spi_write(segs[2]);
-                if (pb_rising & PIN6_bm){
-                    tone_stop();
-                    if(step == 2){
-                        pb = Success;
-                        println("PB3 Correct");
-                    } else {
-                        pb = Fail;
-                        println("PB3 Incorrect");
-                    }
-                }
-                break;
-            case PB4:
-                spi_write(segs[3]);
-                if (pb_rising & PIN7_bm){
-                    tone_stop();
-                    if(step == 3){
-                        pb = Success;
-                        println("PB4 Correct");
-                    } else {
-                        pb = Fail;
-                        println("PB4 Incorrect");
-                    }
-                }
-                break;
-            case Success:
-                if(sequenceLength == count){
-                    spi_write(0x00);
-                    _delay_ms(500);
-                    spi_write(0xFF);
-                    println("success state");
-                    return true;
-                }else
-                {
-                    count++;
-                    step = generate_step(&lfsr_state);
-                    pb = Delay;
-                    println("moving into delay state");
-                    break;
-                }
-            case Fail:
-
-                seed = lfsr_state;
-                return false;
-
-            default: 
+                printf("success state\n");
+                return true;
+            }
+            else
+            {
+                count++;
+                step = generate_step(&lfsr_state);
                 pb = Delay;
+                printf("moving into delay state\n");
                 break;
-        }
+            }
+        case Fail:
 
+            seed = lfsr_state;
+            return false;
+
+        default:
+            pb = Delay;
+            break;
+        }
     }
     return true;
 }
 
-void generate_sequence(uint16_t sequenceLength){
+void generate_sequence(uint16_t sequenceLength)
+{
     uint32_t lfsr_state = seed;
-    for(uint16_t i=0; i <= sequenceLength; i++){
+    for (uint16_t i = 0; i <= sequenceLength; i++)
+    {
         uint8_t step = generate_step(&lfsr_state);
         _delay_ms(250);
         play_tone(step);

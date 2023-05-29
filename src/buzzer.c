@@ -1,56 +1,44 @@
 #include "headers.h"
+#define T1 8971
+#define T2 10668
+#define T3 6720
+#define T4 17941
 
-int tones [] = {
-    496*(2^(-5/12)), 496*(2^(-8/12)), 496, 496*(2^(-17/12))
-};
+int tones[] = {
+    T1, T2, T3, T4};
 
-void buzzer_init(void) {
-    // cli(); // Disables interrupts 
-    // PORTB.DIRSET = PIN0_bm; // enable buzzer output
-    // TCB0.CTRLB = TCB_CNTMODE_INT_gc; // periodic interupt mode
-    // TCB0.CCMP = 3333; //1ms
-    // TCB0.INTCTRL = TCB_CAPT_bm; // Enable CAPT interrupt source
-    // TCB0.CTRLA = TCB_CLKSEL_DIV1_gc | TCB_ENABLE_bm; // no prescaler
-    // TCA0.SINGLE.CTRLB = TCA_SINGLE_WGMODE_SINGLESLOPE_gc | TCA_SINGLE_CMP0EN_bm; // select waveform
-    
+void buzzer_init(void)
+{
     cli();
     PORTB.DIRSET |= PIN0_bm;
-    TCA0.SINGLE.CTRLA |= TCA_SINGLE_CLKSEL_DIV1_gc; //p274  | TCA_SINGLE_ENABLE_bm
-    TCA0.SINGLE.CTRLB = TCA_SINGLE_WGMODE_SINGLESLOPE_gc | TCA_SINGLE_CMP0EN_bm;;//p210
-    // TCA0.SINGLE.PER = 0;
-    // TCA0.SINGLE.CMP0 = floor(TCA0.SINGLE.PER*0.5);
-    // TCA0.SINGLE.CTRLA |= TCA_SINGLE_ENABLE_bm;
-    sei(); // Enable interrupts 
+    TCA0.SINGLE.CTRLA |= TCA_SINGLE_CLKSEL_DIV1_gc;                              // p274  | TCA_SINGLE_ENABLE_bm
+    TCA0.SINGLE.CTRLB = TCA_SINGLE_WGMODE_SINGLESLOPE_gc | TCA_SINGLE_CMP0EN_bm; // p210
+    sei();                                                                       // Enable interrupts
 }
 
-void play_tone(uint8_t Index){
-    // PORTB.DIRSET |= PIN0_bm;
-    TCA0.SINGLE.PERBUF = 3333333/tones[Index]; // 2120 Hz, Period: 3,333,333/2120
+void play_tone(uint8_t Index)
+{
+    TCA0.SINGLE.PERBUF = tones[Index]; // 2120 Hz, Period: 3,333,333/2120
     TCA0.SINGLE.CMP0BUF = TCA0.SINGLE.PERBUF >> 1;
     TCA0.SINGLE.CTRLA = TCA_SINGLE_ENABLE_bm;
 }
-void tone_stop(void){
-    // PORTB.DIRCLR |= PIN0_bm;
+void tone_stop(void)
+{
     TCA0.SINGLE.CTRLA = ~TCA_SINGLE_ENABLE_bm;
-    //TCA0.SINGLE.PERBUF = 0;
 }
 
-// void buzzer_init(void) {
-//     cli(); 
+void inc(void)
+{
+    for (size_t i = 0; i < 3; i++)
+    {
+        tones[i] >>= 1;
+    }
+}
 
-//     PORTB.DIRSET = PIN0_bm;
-
-//     TCA0.SINGLE.CTRLA = TCA_SINGLE_CLKSEL_DIV1_gc;
-//     TCA0.SINGLE.CTRLB = TCA_SINGLE_WGMODE_SINGLESLOPE_gc | TCA_SINGLE_CMP0EN_bm;
-
-//     sei();
-// }
-
-// void play_tone(uint8_t Index){
-//     TCA0.SINGLE.PERBUF = 3333333 /tones[Index]; // 2120 Hz, Period: 3,333,333/2120
-//     TCA0.SINGLE.CMP0BUF = TCA0.SINGLE.PERBUF >> 1;
-//     TCA0.SINGLE.CTRLA |= TCA_SINGLE_ENABLE_bm;
-// }
-// void tone_stop(void){
-//     TCA0.SINGLE.CTRLA = ~TCA_SINGLE_ENABLE_bm;
-// }
+void dec(void)
+{
+    for (size_t i = 0; i < 3; i++)
+    {
+        tones[i] <<= 1;
+    }
+}
