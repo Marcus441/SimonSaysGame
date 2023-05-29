@@ -3,7 +3,6 @@
 #include <avr/interrupt.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <util/delay.h>
 #include <stdbool.h>
 
 #define SID 0x11240296
@@ -14,9 +13,9 @@
 #define SEG3 0x3E
 #define SEG4 0x6B
 
-#define SEGS_EF 0b00111110
-#define SEGS_BC 0b01101011
-#define Spi_Fail 0b01110111
+#define SegLeft 0x3E
+#define SegRight 0x6B
+#define Spi_Fail 0x77
 #define Spi_On 0x00
 #define Spi_Off 0x7F
 

@@ -6,6 +6,7 @@
         "sequence.h": "c",
         "buttons.h": "c",
         "interrupt.h": "c",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "timer.h": "c"
     }
 }

@@ -1,7 +1,11 @@
 #include "buttons.h"
 #include "spi.h"
+#include "timer.h"
 
-
+volatile uint16_t elapsed_time = 0;
+volatile uint16_t playback_time = 2000;
+volatile uint16_t new_time = 2000;
+volatile bool allow_updating_playback_delay = false;
 
 extern volatile uint8_t pb_debounced;
 extern uint8_t segs[];
@@ -32,3 +36,15 @@ ISR(TCB0_INT_vect)
 
 }
 
+ISR(TCB1_INT_vect)
+{
+    elapsed_time++;
+
+    if (allow_updating_playback_delay)
+    {
+        playback_time = new_time;
+        allow_updating_playback_delay = false;
+    }
+
+    TCB1.INTFLAGS = TCB_CAPT_bm;
+}

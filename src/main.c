@@ -3,7 +3,8 @@
 #include "spi.h"
 #include "buttons.h"
 #include "buzzer.h"
-
+#include "adc.h"
+#include "delay.h"
 typedef enum
 {
     sequence_start,
@@ -19,12 +20,14 @@ int main(void)
     spi_init();
     buttons_init();
     buzzer_init();
+    adc_init();
+    delay_init();
 
     printf("Game Start\n");
     GAMESTATE state = sequence_start;
 
     bool outcome;
-    uint16_t sequence_length = 0;
+    uint16_t sequence_length = 1;
 
     while (1)
     {
@@ -54,7 +57,7 @@ int main(void)
             //printf("Success\n");
             break;
         case failed:
-            sequence_length = 0;
+            sequence_length = 1;
             state = sequence_start;
             printf("Failed\n");
             break;
