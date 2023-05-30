@@ -75,25 +75,25 @@ bool runSequence(uint16_t sequenceLength)
             if (pb_falling & PIN4_bm)
             {
                 pb = PB1;
-                printf("PB1 Pressed\n");
+                // printf("PB1 Pressed\n");
             }
             else if (pb_falling & PIN5_bm)
             {
                 pb = PB2;
-                printf("PB2 Pressed\n");
+                // printf("PB2 Pressed\n");
             }
             else if (pb_falling & PIN6_bm)
             {
                 pb = PB3;
-                printf("PB3 Pressed\n");
+                // printf("PB3 Pressed\n");
             }
             else if (pb_falling & PIN7_bm)
             {
                 pb = PB4;
-                printf("PB4 Pressed\n");
+                // printf("PB4 Pressed\n");
             }
             break;
-        allow_updating_playback_delay = false;
+            allow_updating_playback_delay = false;
         case PB1:
             play_tone(0);
             segs[0] = SegLeft;
@@ -199,8 +199,8 @@ bool runSequence(uint16_t sequenceLength)
             count++;
             if (sequenceLength == count)
             {
-                printf("SUCCESS\n");
-                printf("%d\n", sequenceLength);
+                // printf("SUCCESS\n");
+                // printf("%d\n", sequenceLength);
 
                 display_score(sequenceLength);
                 delay(false);
@@ -209,7 +209,7 @@ bool runSequence(uint16_t sequenceLength)
                 delay(false);
                 segs[0] = Spi_Off;
                 segs[1] = Spi_Off;
-                printf("success state\n");
+                // printf("success state\n");
                 pb = Paused;
                 return true;
             }
@@ -217,13 +217,13 @@ bool runSequence(uint16_t sequenceLength)
             {
                 step = generate_step(&lfsr_state);
                 pb = UserInput;
-                printf("moving into UserInput\n");
+                // printf("moving into UserInput\n");
             }
             break;
         case Fail:
             allow_updating_playback_delay = true;
-            printf("GAME OVER\n");
-            printf("%d\n", sequenceLength);
+            // printf("GAME OVER\n");
+            // printf("%d\n", sequenceLength);
 
             display_score(sequenceLength - 1);
             delay(false);

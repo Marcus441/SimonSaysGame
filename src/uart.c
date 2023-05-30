@@ -7,7 +7,7 @@ extern volatile int8_t octave;
 extern volatile GAMESTATES pb;
 extern volatile bool pb_released;
 extern volatile uint32_t seed;
-
+extern volatile uint32_t tones[];
 
 void uart_init(void)
 {
@@ -15,7 +15,8 @@ void uart_init(void)
     stdout = &mystdout;
 
     cli();
-    PORTB.DIRSET |= PIN2_bm;                      // Enable PB2 as output (USART0 TXD)
+    PORTB.DIRSET |= PIN2_bm; // Enable PB2 as output (USART0 TXD)
+    USART0.CTRLA = USART_RXCIE_bm;
     USART0.BAUD = 1389;                           // 9600 baud @ 3.3 MHz
     USART0.CTRLB = USART_RXEN_bm | USART_TXEN_bm; // Enable Tx/Rx
     sei();
@@ -56,8 +57,6 @@ uint8_t hex_to_int(char c)
         return 16; // invalid input
     }
 }
-
-
 
 ISR(USART0_RXC_vect)
 {
@@ -109,16 +108,28 @@ ISR(USART0_RXC_vect)
         case ',':
         case 'k':
             if (octave < 3)
+            {
                 octave++;
+                inc();
+            }
             break;
         case '.':
         case 'l':
             if (octave > -2)
+            {
                 octave--;
+                dec();
+            }
             break;
         case '0':
         case 'p':
             octave = 0;
+
+            tones[0] = T1;
+            tones[1] = T2;
+            tones[2] = T3;
+            tones[3] = T4;
+
             seed = SID;
             pb = Reset;
             break;
@@ -152,7 +163,3 @@ ISR(USART0_RXC_vect)
         break;
     }
 }
-
-
-
-

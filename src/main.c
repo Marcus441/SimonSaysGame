@@ -16,7 +16,7 @@ int main(void)
     adc_init();
     delay_init();
 
-    printf("Game Start\n");
+    // printf("Game Start\n");
     GAMESTATES state = sequence_start;
 
     bool outcome;
@@ -52,7 +52,7 @@ int main(void)
         case Fail:
             sequence_length = 1;
             state = sequence_start;
-            printf("Failed\n");
+            // printf("Failed\n");
             break;
         default:
             break;
