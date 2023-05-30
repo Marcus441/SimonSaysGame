@@ -27,7 +27,7 @@ void tone_stop(void)
 
 void inc(void)
 {
-    for (size_t i = 0; i < 3; i++)
+    for (size_t i = 0; i <= 3; i++)
     {
         tones[i] >>= 1;
     }
@@ -35,7 +35,7 @@ void inc(void)
 
 void dec(void)
 {
-    for (size_t i = 0; i < 3; i++)
+    for (size_t i = 0; i <= 3; i++)
     {
         tones[i] <<= 1;
     }
