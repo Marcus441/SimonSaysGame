@@ -20,7 +20,6 @@ typedef enum
 uint32_t seed = SID;
 
 extern volatile uint8_t pb_debounced;
-uint16_t duration;
 extern uint8_t digits[];
 volatile uint8_t segs[] = {Spi_Off, Spi_Off};
 
@@ -180,10 +179,10 @@ bool runSequence(uint16_t sequenceLength)
                 printf("%d\n", sequenceLength);
 
                 display_score(sequenceLength);
-                delay_ms(duration);
+                delay(false);
                 segs[0] = Spi_On;
                 segs[1] = Spi_On;
-                delay_ms(duration);
+                delay(false);
                 segs[0] = Spi_Off;
                 segs[1] = Spi_Off;
                 // printf("success state\n");
@@ -200,11 +199,11 @@ bool runSequence(uint16_t sequenceLength)
             printf("GAME OVER\n");
             printf("%d\n", sequenceLength);
 
-            display_score(sequenceLength - 1 );
-            delay_ms(duration);
+            display_score(sequenceLength - 1);
+            delay(false);
             segs[0] = Spi_Fail;
             segs[1] = Spi_Fail;
-            delay_ms(duration);
+            delay(false);
             segs[0] = Spi_Off;
             segs[1] = Spi_Off;
 
@@ -228,7 +227,6 @@ void generate_sequence(uint16_t sequenceLength)
     uint32_t lfsr_state = seed;
     for (uint16_t i = 0; i < sequenceLength; i++)
     {
-        duration = get_duration();
         uint8_t step = generate_step(&lfsr_state);
         play_tone(step);
 
@@ -248,11 +246,11 @@ void generate_sequence(uint16_t sequenceLength)
             break;
         }
 
-        testDelay(true);
+        delay(true);
 
         tone_stop();
         segs[0] = Spi_Off;
         segs[1] = Spi_Off;
-        testDelay(true);
+        delay(true);
     }
 }
