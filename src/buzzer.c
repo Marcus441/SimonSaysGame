@@ -1,6 +1,6 @@
 #include "headers.h"
 
-
+volatile int8_t octave = 0;
 int tones[] = {
     T1, T2, T3, T4};
 
@@ -21,7 +21,7 @@ void play_tone(uint8_t Index)
 }
 void tone_stop(void)
 {
-    TCA0.SINGLE.CTRLA = ~TCA_SINGLE_ENABLE_bm;
+    TCA0.SINGLE.CMP0BUF = 0;
 }
 
 void inc(void)
