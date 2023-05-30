@@ -46,6 +46,6 @@ ISR(TCB1_INT_vect)
         playback_time = new_time;
         allow_updating_playback_delay = false;
     }
-    new_time = get_duration();
+    // new_time = 
     TCB1.INTFLAGS = TCB_CAPT_bm;
 }

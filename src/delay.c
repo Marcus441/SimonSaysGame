@@ -13,7 +13,7 @@ void delay_init(void)
 uint16_t get_duration(void)
 {
     uint16_t result = ADC0.RESULT;
-    uint16_t duration = (result >>= 8) * 1750 + 250;
+    uint16_t duration = result / 256.0 * 1750 + 250;
     return duration;
 }
 

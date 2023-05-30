@@ -93,6 +93,7 @@ bool runSequence(uint16_t sequenceLength)
                 printf("PB4 Pressed\n");
             }
             break;
+        allow_updating_playback_delay = false;
         case PB1:
             play_tone(0);
             segs[0] = SegLeft;
@@ -106,7 +107,7 @@ bool runSequence(uint16_t sequenceLength)
             else if (elapsed_time >= playback_time)
             {
                 tone_stop();
-                allow_updating_playback_delay = true;
+                // allow_updating_playback_delay = true;
                 if (step == 0)
                 {
                     pb = Success;
@@ -131,7 +132,7 @@ bool runSequence(uint16_t sequenceLength)
             else if (elapsed_time >= playback_time)
             {
                 tone_stop();
-                allow_updating_playback_delay = true;
+                // allow_updating_playback_delay = true;
                 if (step == 1)
                 {
                     pb = Success;
@@ -156,7 +157,7 @@ bool runSequence(uint16_t sequenceLength)
             else if (elapsed_time >= playback_time)
             {
                 tone_stop();
-                allow_updating_playback_delay = true;
+                // allow_updating_playback_delay = true;
                 if (step == 2)
                 {
                     pb = Success;
@@ -181,7 +182,7 @@ bool runSequence(uint16_t sequenceLength)
             else if (elapsed_time >= playback_time)
             {
                 tone_stop();
-                allow_updating_playback_delay = true;
+                // allow_updating_playback_delay = true;
                 if (step == 3)
                 {
                     pb = Success;
@@ -194,6 +195,7 @@ bool runSequence(uint16_t sequenceLength)
 
             break;
         case Success:
+            allow_updating_playback_delay = true;
             count++;
             if (sequenceLength == count)
             {
@@ -219,6 +221,7 @@ bool runSequence(uint16_t sequenceLength)
             }
             break;
         case Fail:
+            allow_updating_playback_delay = true;
             printf("GAME OVER\n");
             printf("%d\n", sequenceLength);
 

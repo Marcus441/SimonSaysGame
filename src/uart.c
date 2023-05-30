@@ -7,6 +7,8 @@ extern volatile int8_t octave;
 extern volatile GAMESTATES pb;
 extern volatile bool pb_released;
 extern volatile uint32_t seed;
+
+
 void uart_init(void)
 {
     static FILE mystdout = FDEV_SETUP_STREAM(uart_putc_printf, NULL, _FDEV_SETUP_WRITE);
