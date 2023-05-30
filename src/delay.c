@@ -23,3 +23,12 @@ void delay_ms(uint16_t ms)
     while (elapsed_time < ms)
         ;
 }
+
+void testDelay(bool div)
+{
+    uint16_t ms = get_duration();
+    if(div) ms >>= 2;
+    elapsed_time = 0;
+    while (elapsed_time < ms)
+        ;
+}

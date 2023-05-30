@@ -32,6 +32,7 @@ ISR(TCB0_INT_vect)
         spi_write(segs[1]);
     }
     digit = !digit;
+    
     TCB0.INTFLAGS = TCB_CAPT_bm;         // Acknowledge interrupt
 
 }

@@ -201,10 +201,10 @@ bool runSequence(uint16_t sequenceLength)
             printf("%d\n", sequenceLength);
 
             display_score(sequenceLength - 1 );
-            delay_ms(playback_time);
+            delay_ms(duration);
             segs[0] = Spi_Fail;
             segs[1] = Spi_Fail;
-            delay_ms(playback_time);
+            delay_ms(duration);
             segs[0] = Spi_Off;
             segs[1] = Spi_Off;
 
@@ -248,11 +248,11 @@ void generate_sequence(uint16_t sequenceLength)
             break;
         }
 
-        delay_ms(duration >> 1);
+        testDelay(true);
 
         tone_stop();
         segs[0] = Spi_Off;
         segs[1] = Spi_Off;
-        delay_ms(duration >> 1);
+        testDelay(true);
     }
 }
