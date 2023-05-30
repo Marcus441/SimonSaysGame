@@ -200,7 +200,7 @@ bool runSequence(uint16_t sequenceLength)
             printf("GAME OVER\n");
             printf("%d\n", sequenceLength);
 
-            display_score(sequenceLength);
+            display_score(sequenceLength - 1 );
             delay_ms(playback_time);
             segs[0] = Spi_Fail;
             segs[1] = Spi_Fail;
