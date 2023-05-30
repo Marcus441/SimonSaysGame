@@ -76,14 +76,13 @@ int main(void)
                     break;
                 }
             }
-
             if (state != GetName)
             {
                 display_high_scores();
                 state = sequence_start;
             }
             
-            seed = init_seed;
+            // seed = init_seed;
             // printf("Failed\n");
             break;
         case GetName:
