@@ -1,7 +1,7 @@
 #include "buttons.h"
 #include "spi.h"
-#include "timer.h"
 #include "delay.h"
+
 volatile uint16_t elapsed_time = 0;
 volatile uint16_t playback_time;
 volatile uint16_t new_time;

@@ -245,7 +245,7 @@ bool runSequence(uint16_t sequenceLength)
 
             segs[0] = Spi_Off;
             segs[1] = Spi_Off;
-
+            
             pb = Paused;
             return 0;
             break;

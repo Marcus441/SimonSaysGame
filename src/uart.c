@@ -1,13 +1,25 @@
 #include "headers.h"
 #include "buzzer.h"
 #include "states.h"
+#include "timer.h"
 
-int uart_putc_printf(char c, FILE *stream);
+
 extern volatile int8_t octave;
 extern volatile GAMESTATES pb;
+extern volatile GAMESTATES state;
 extern volatile bool pb_released;
-extern volatile uint32_t seed;
 extern volatile uint32_t tones[];
+extern volatile char name[20];
+
+extern volatile uint32_t init_seed;
+extern volatile uint32_t seed;
+extern volatile uint16_t sequence_len;
+
+
+volatile SERIAL_STATE serial_state = Command_Wait;
+volatile uint8_t chars_received = 0;
+
+int uart_putc_printf(char c, FILE *stream);
 
 void uart_init(void)
 {
@@ -60,9 +72,7 @@ uint8_t hex_to_int(char c)
 
 ISR(USART0_RXC_vect)
 {
-    static SERIAL_STATE serial_state = Command_Wait;
 
-    static uint8_t chars_received = 0;
     static uint16_t payload = 0;
     static bool payload_valid = true;
 
@@ -124,13 +134,11 @@ ISR(USART0_RXC_vect)
         case '0':
         case 'p':
             octave = 0;
-
             tones[0] = T1;
             tones[1] = T2;
             tones[2] = T3;
             tones[3] = T4;
-
-            seed = SID;
+            seed = init_seed;
             pb = Reset;
             break;
         case '9':
@@ -146,19 +154,30 @@ ISR(USART0_RXC_vect)
         break;
     case Payload_Wait:
     {
-        uint8_t parsed_result = hex_to_int((char)rx_data);
-        if (parsed_result != 16)
-            payload = (payload << 4) | parsed_result;
+        uint8_t toint = hex_to_int((char)rx_data);
+        if (toint != 16)
+            payload = (payload << 4) | toint;
         else
             payload_valid = 0;
 
         if (++chars_received == 8)
         {
-            seed = payload_valid ? payload : seed;
+            init_seed = payload_valid ? payload : seed;
             serial_state = Command_Wait;
         }
         break;
     }
+    case uart_GetName:
+        if (rx_data == '\r')
+        {
+            state = SetName;
+            serial_state = Command_Wait;
+        } else{
+            name[chars_received] = rx_data;
+            chars_received++;
+            elapsed_time = 0;
+        }
+        break;
     default:
         break;
     }

@@ -1,7 +1,8 @@
 typedef enum
 {
     Command_Wait,
-    Payload_Wait
+    Payload_Wait,
+    uart_GetName
 } SERIAL_STATE;
 
 typedef enum
@@ -15,6 +16,14 @@ typedef enum
     Fail,
     UserInput,
     Reset,
-    Paused
+    Paused,
+    GetName,
+    SetName
 } GAMESTATES;
+
+typedef struct
+{
+    char name[20];
+    uint16_t HighScore;
+} high_score_t;
 
