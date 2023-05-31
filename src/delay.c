@@ -1,7 +1,7 @@
 #include "headers.h"
 #include "timer.h"
 
-void delay_init(void) 
+void delay_init(void)
 {
     cli();
     TCB1.CCMP = 3333;
@@ -17,16 +17,12 @@ uint16_t get_duration(void)
     return duration;
 }
 
-void delay_ms(uint16_t ms)
-{
-    elapsed_time = 0;
-    while (elapsed_time < ms)
-        ;
-}
-
 void delay(bool div)
 {
     uint16_t ms = get_duration();
-    if(div) ms >>= 1;
-    delay_ms(ms);
+    if (div)
+        ms >>= 1;
+    elapsed_time = 0;
+    while (elapsed_time < ms)
+        ;
 }
