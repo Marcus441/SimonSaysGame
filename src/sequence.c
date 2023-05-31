@@ -93,11 +93,25 @@ bool runSequence(uint16_t sequenceLength)
                 // printf("PB4 Pressed\n");
             }
             break;
-            allow_updating_playback_delay = false;
+        allow_updating_playback_delay = false;
         case PB1:
             play_tone(0);
             segs[0] = SegLeft;
-            if (uart_control == true) // runs when a button is pressed
+
+            if (pb_rising & PIN4_bm) //
+            {
+                uart_control = false;
+                tone_stop();
+                if (step == 0)
+                {
+                    pb = Success;
+                }
+                else
+                {
+                    pb = Fail;
+                }
+            }
+            else if (uart_control == true) // runs when a button is pressed
             {
                 if (elapsed_time >= playback_time)
                 {
@@ -113,11 +127,17 @@ bool runSequence(uint16_t sequenceLength)
                     }
                 }
             }
-            if (pb_rising & PIN4_bm) //
+
+            printf("%d / %d\n", elapsed_time, playback_time);
+            break;
+        case PB2:
+            play_tone(1);
+            segs[0] = SegRight;
+            if (pb_rising & PIN5_bm) //
             {
                 uart_control = false;
                 tone_stop();
-                if (step == 0)
+                if (step == 1)
                 {
                     pb = Success;
                 }
@@ -126,13 +146,7 @@ bool runSequence(uint16_t sequenceLength)
                     pb = Fail;
                 }
             }
-
-            printf("%d / %d\n", elapsed_time, playback_time);
-            break;
-        case PB2:
-            play_tone(1);
-            segs[0] = SegRight;
-            if (uart_control == true) // runs when a button is pressed
+            else if (uart_control == true) // runs when a button is pressed
             {
                 if (elapsed_time >= playback_time)
                 {
@@ -148,11 +162,16 @@ bool runSequence(uint16_t sequenceLength)
                     }
                 }
             }
-            if (pb_rising & PIN5_bm) //
+
+            break;
+        case PB3:
+            play_tone(2);
+            segs[1] = SegLeft;
+            if (pb_rising & PIN6_bm) //
             {
                 uart_control = false;
                 tone_stop();
-                if (step == 1)
+                if (step == 2)
                 {
                     pb = Success;
                 }
@@ -160,13 +179,7 @@ bool runSequence(uint16_t sequenceLength)
                 {
                     pb = Fail;
                 }
-            }
-
-            break;
-        case PB3:
-            play_tone(2);
-            segs[1] = SegLeft;
-            if (uart_control == true) // runs when a button is pressed
+            }else if (uart_control == true) // runs when a button is pressed
             {
                 if (elapsed_time >= playback_time)
                 {
@@ -182,11 +195,17 @@ bool runSequence(uint16_t sequenceLength)
                     }
                 }
             }
-            if (pb_rising & PIN6_bm) //
+
+            break;
+        case PB4:
+            play_tone(3);
+            segs[1] = SegRight;
+            
+            if (pb_rising & PIN7_bm) //
             {
                 uart_control = false;
                 tone_stop();
-                if (step == 2)
+                if (step == 3)
                 {
                     pb = Success;
                 }
@@ -194,13 +213,7 @@ bool runSequence(uint16_t sequenceLength)
                 {
                     pb = Fail;
                 }
-            }
-
-            break;
-        case PB4:
-            play_tone(3);
-            segs[1] = SegRight;
-            if (uart_control == true) // runs when a button is pressed
+            } else if (uart_control == true) // runs when a button is pressed
             {
                 if (elapsed_time >= playback_time)
                 {
@@ -214,19 +227,6 @@ bool runSequence(uint16_t sequenceLength)
                     {
                         pb = Fail;
                     }
-                }
-            }
-            if (pb_rising & PIN7_bm) //
-            {
-                uart_control = false;
-                tone_stop();
-                if (step == 3)
-                {
-                    pb = Success;
-                }
-                else
-                {
-                    pb = Fail;
                 }
             }
             break;

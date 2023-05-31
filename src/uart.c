@@ -84,7 +84,7 @@ ISR(USART0_RXC_vect)
         {
         case '1':
         case 'q':
-            if (pb == UserInput)
+            if (pb == (UserInput | PB1))
             {
                 pb = PB1;
                 uart_control = true;
@@ -147,7 +147,8 @@ ISR(USART0_RXC_vect)
             payload = 0;
             serial_state = Payload_Wait;
             break;
-        default:
+        case '\0':
+            uart_control = false;
             break;
         }
         break;
