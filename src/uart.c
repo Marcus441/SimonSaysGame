@@ -3,11 +3,10 @@
 #include "states.h"
 #include "timer.h"
 
-
 extern volatile int8_t octave;
 extern volatile GAMESTATES pb;
 extern volatile GAMESTATES state;
-extern volatile bool pb_released;
+extern volatile bool uart_control;
 extern volatile uint32_t tones[];
 extern volatile char name[20];
 
@@ -88,7 +87,7 @@ ISR(USART0_RXC_vect)
             if (pb == UserInput)
             {
                 pb = PB1;
-                pb_released = true;
+                uart_control = true;
             }
             break;
         case '2':
@@ -96,7 +95,7 @@ ISR(USART0_RXC_vect)
             if (pb == UserInput)
             {
                 pb = PB2;
-                pb_released = true;
+                uart_control = true;
             }
             break;
         case '3':
@@ -104,7 +103,7 @@ ISR(USART0_RXC_vect)
             if (pb == UserInput)
             {
                 pb = PB3;
-                pb_released = true;
+                uart_control = true;
             }
             break;
         case '4':
@@ -112,7 +111,7 @@ ISR(USART0_RXC_vect)
             if (pb == UserInput)
             {
                 pb = PB4;
-                pb_released = true;
+                uart_control = true;
             }
             break;
         case ',':
@@ -152,6 +151,7 @@ ISR(USART0_RXC_vect)
             break;
         }
         break;
+        // reset the RXdata?
     case Payload_Wait:
     {
         uint8_t toint = hex_to_int((char)rx_data);

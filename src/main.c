@@ -70,7 +70,7 @@ int main(void)
             {
                 if (sequence_length > highScores[i].HighScore)
                 {
-                    printf("Enter name: \n");
+                    printf("Enter name: ");
                     serial_state = uart_GetName;
                     state = GetName;
                     break;
@@ -82,7 +82,7 @@ int main(void)
                 state = sequence_start;
             }
             
-            // seed = init_seed;
+            seed = init_seed;
             // printf("Failed\n");
             break;
         case GetName:
@@ -130,6 +130,6 @@ void display_high_scores()
         if (highScores[i].HighScore == 0)
             break;
 
-        printf("%s %d\n", highScores[i].name, highScores[i].HighScore);
+        printf("\n<%s %d>\n", highScores[i].name, highScores[i].HighScore);
     }
 }
