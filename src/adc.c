@@ -1,4 +1,5 @@
 #include "headers.h"
+#include "adc.h"
 
 void adc_init(void)
 {

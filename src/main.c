@@ -38,7 +38,7 @@ int main(void)
 
     bool outcome;
     uint16_t sequence_length = 1;
-
+    
     while (1)
     {
         switch (state)

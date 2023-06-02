@@ -1,4 +1,6 @@
 #include "headers.h"
+#include "uart.h"
+
 #include "buzzer.h"
 #include "states.h"
 #include "timer.h"
@@ -18,7 +20,6 @@ extern volatile uint16_t sequence_len;
 volatile SERIAL_STATE serial_state = Command_Wait;
 volatile uint8_t chars_received = 0;
 
-int uart_putc_printf(char c, FILE *stream);
 
 void uart_init(void)
 {

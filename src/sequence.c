@@ -1,4 +1,6 @@
 #include "headers.h"
+#include "sequence.h"
+
 #include "uart.h"
 #include "spi.h"
 #include "buzzer.h"
@@ -6,7 +8,6 @@
 #include "timer.h"
 #include "delay.h"
 #include "states.h"
-
 extern volatile uint8_t pb_debounced;
 extern uint8_t digits[];
 

@@ -8,6 +8,7 @@
         "interrupt.h": "c",
         "stdint.h": "c",
         "timer.h": "c",
-        "buzzer.h": "c"
+        "buzzer.h": "c",
+        "states.h": "c"
     }
 }

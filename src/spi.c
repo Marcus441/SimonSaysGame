@@ -1,5 +1,5 @@
 #include "headers.h"
-
+#include "spi.h"
 
 
 uint8_t digits[] = {

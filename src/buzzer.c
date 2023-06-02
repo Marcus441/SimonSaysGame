@@ -1,4 +1,7 @@
 #include "headers.h"
+#include "buzzer.h"
+
+
 
 volatile int8_t octave = 0;
 volatile uint32_t tones[] = {
