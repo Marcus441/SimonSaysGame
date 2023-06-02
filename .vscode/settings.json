@@ -9,6 +9,7 @@
         "stdint.h": "c",
         "timer.h": "c",
         "buzzer.h": "c",
-        "states.h": "c"
+        "states.h": "c",
+        "delay.h": "c"
     }
 }

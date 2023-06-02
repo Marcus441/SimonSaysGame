@@ -32,7 +32,8 @@ int main(void)
     buzzer_init();
     adc_init();
     delay_init();
-
+    get_duration();
+    
     // printf("Game Start\n");
     state = sequence_start;
 
