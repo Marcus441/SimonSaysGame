@@ -31,8 +31,9 @@ uint8_t generate_step(uint32_t *state)
 void display_score(uint16_t score)
 {
     segs[0] = Spi_Off;
-    if (score > 9)
+    if (score > 9){
         segs[0] = digits[score % 100 / 10];
+    }
     segs[1] = digits[score % 10];
 }
 
@@ -113,8 +114,9 @@ bool runSequence(uint16_t sequenceLength)
             }
             else if (uart_control == true) // runs when a button is pressed
             {
-                if (elapsed_time >= playback_time)
+                if (elapsed_time >= get_duration())
                 {
+                    uart_control = false;
                     tone_stop();
                     // allow_updating_playback_delay = true;
                     if (step == 0)
@@ -128,7 +130,7 @@ bool runSequence(uint16_t sequenceLength)
                 }
             }
 
-            printf("%d / %d\n", elapsed_time, playback_time);
+            // printf("%d / %d\n", elapsed_time, get_duration());
             break;
         case PB2:
             play_tone(1);
@@ -148,8 +150,9 @@ bool runSequence(uint16_t sequenceLength)
             }
             else if (uart_control == true) // runs when a button is pressed
             {
-                if (elapsed_time >= playback_time)
+                if (elapsed_time >= get_duration())
                 {
+                    uart_control = false;
                     tone_stop();
                     // allow_updating_playback_delay = true;
                     if (step == 1)
@@ -181,8 +184,9 @@ bool runSequence(uint16_t sequenceLength)
                 }
             }else if (uart_control == true) // runs when a button is pressed
             {
-                if (elapsed_time >= playback_time)
+                if (elapsed_time >= get_duration())
                 {
+                    uart_control = false;
                     tone_stop();
                     // allow_updating_playback_delay = true;
                     if (step == 2)
@@ -215,8 +219,9 @@ bool runSequence(uint16_t sequenceLength)
                 }
             } else if (uart_control == true) // runs when a button is pressed
             {
-                if (elapsed_time >= playback_time)
+                if (elapsed_time >= get_duration())
                 {
+                    uart_control = false;
                     tone_stop();
                     // allow_updating_playback_delay = true;
                     if (step == 3)

@@ -14,7 +14,6 @@ extern volatile uint32_t init_seed;
 extern volatile uint32_t seed;
 extern volatile uint16_t sequence_len;
 
-
 volatile SERIAL_STATE serial_state = Command_Wait;
 volatile uint8_t chars_received = 0;
 
@@ -80,6 +79,7 @@ ISR(USART0_RXC_vect)
     switch (serial_state)
     {
     case Command_Wait:
+        // uart_putc(rx_data);
         switch (rx_data)
         {
         case '1':
@@ -169,11 +169,13 @@ ISR(USART0_RXC_vect)
         break;
     }
     case uart_GetName:
-        if (rx_data == '\r')
+        if (rx_data == '\n' || rx_data == '\r')
         {
             state = SetName;
             serial_state = Command_Wait;
-        } else{
+        }
+        else
+        {
             name[chars_received] = rx_data;
             chars_received++;
             elapsed_time = 0;

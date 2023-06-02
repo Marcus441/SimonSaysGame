@@ -19,12 +19,12 @@
 #define Spi_On 0x00
 #define Spi_Off 0x7F
 
-// #define T1 8971
-// #define T2 10668
-// #define T3 6720
-// #define T4 17941
+#define T1 8971
+#define T2 10668
+#define T3 6720
+#define T4 17941
 
-#define T1 0
-#define T2 0
-#define T3 0
-#define T4 0
+// #define T1 0
+// #define T2 0
+// #define T3 0
+// #define T4 0

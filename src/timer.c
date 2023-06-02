@@ -3,8 +3,8 @@
 #include "delay.h"
 
 volatile uint16_t elapsed_time = 0;
-volatile uint16_t playback_time = 500;
-volatile uint16_t new_time = 500;
+volatile uint16_t playback_time;
+volatile uint16_t new_time;
 volatile bool allow_updating_playback_delay = false;
 
 extern volatile uint8_t pb_debounced;
