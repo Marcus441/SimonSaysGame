@@ -246,10 +246,10 @@ bool runSequence(uint16_t sequenceLength)
                 printf("%d\n", sequenceLength);
 
                 display_score(sequenceLength);
-                delay(false);
+                delay(true);
                 segs[0] = Spi_On;
                 segs[1] = Spi_On;
-                delay(false);
+                delay(true);
                 segs[0] = Spi_Off;
                 segs[1] = Spi_Off;
                 // printf("success state\n");
@@ -269,10 +269,10 @@ bool runSequence(uint16_t sequenceLength)
             printf("%d\n", sequenceLength);
 
             display_score(sequenceLength);
-            delay(false);
+            delay(true);
             segs[0] = Spi_Fail;
             segs[1] = Spi_Fail;
-            delay(false);
+            delay(true);
             segs[0] = Spi_Off;
             segs[1] = Spi_Off;
 
