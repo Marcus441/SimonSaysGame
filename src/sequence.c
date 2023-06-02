@@ -245,13 +245,14 @@ bool runSequence(uint16_t sequenceLength)
                 printf("SUCCESS\n");
                 printf("%d\n", sequenceLength);
 
-                display_score(sequenceLength);
-                delay(false);
                 segs[0] = Spi_On;
                 segs[1] = Spi_On;
                 delay(true);
                 segs[0] = Spi_Off;
                 segs[1] = Spi_Off;
+                display_score(sequenceLength);
+                delay(true);
+                
                 // printf("success state\n");
                 pb = Paused;
                 return true;
@@ -268,13 +269,14 @@ bool runSequence(uint16_t sequenceLength)
             printf("GAME OVER\n");
             printf("%d\n", sequenceLength);
 
-            display_score(sequenceLength);
-            delay(false);
             segs[0] = Spi_Fail;
             segs[1] = Spi_Fail;
             delay(true);
             segs[0] = Spi_Off;
             segs[1] = Spi_Off;
+            display_score(sequenceLength);
+            delay(true);
+            
 
             count++;
             for (; count < sequenceLength; count++)
