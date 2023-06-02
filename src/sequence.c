@@ -271,11 +271,11 @@ bool runSequence(uint16_t sequenceLength)
 
             segs[0] = Spi_Fail;
             segs[1] = Spi_Fail;
-            delay(false);
+            delay(true);
             segs[0] = Spi_Off;
             segs[1] = Spi_Off;
             display_score(sequenceLength);
-            delay(false);
+            delay(true);
             
 
             count++;
