@@ -136,6 +136,6 @@ void display_high_scores()
         if (highScores[i].HighScore == 0)
             break;
 
-        printf("<%s %d>\n", highScores[i].name, highScores[i].HighScore);
+        printf("%s %d\n", highScores[i].name, highScores[i].HighScore);
     }
 }
