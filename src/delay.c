@@ -10,16 +10,17 @@ void delay_init(void)
     sei();
 }
 
-uint16_t get_duration(void)
+uint32_t get_duration(void)
 {
-    uint16_t result = ADC0.RESULT;
-    uint16_t duration = ((result * 1750) >> 8) + 250;
+    uint32_t result = ADC0.RESULT;
+    uint32_t duration = ((result * 1750) >> 8) + 250;
+    // uint16_t duration = (result * 7) + ((result * 7)  >> 8);
     return duration;
 }
 
 void delay(bool div)
 {
-    uint16_t ms = get_duration();
+    uint32_t ms = get_duration();
     if (div)
         ms >>= 1;
     elapsed_time = 0;
