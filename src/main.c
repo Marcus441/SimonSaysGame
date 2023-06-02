@@ -21,6 +21,7 @@ extern volatile SERIAL_STATE serial_state;
 
 volatile uint32_t init_seed = SID;
 extern volatile uint32_t seed;
+extern volatile uint32_t temp_seed;
 volatile uint16_t sequence_length;
 
 int main(void)
@@ -70,7 +71,7 @@ int main(void)
             {
                 if (sequence_length > highScores[i].HighScore)
                 {
-                    printf("Enter name: \n");
+                    printf("Enter name: ");
                     serial_state = uart_GetName;
                     state = GetName;
                     break;
@@ -81,19 +82,24 @@ int main(void)
                 display_high_scores();
                 state = sequence_start;
             }
-            
-            seed = init_seed;
+
+            if (temp_seed)
+            {
+                seed = temp_seed;
+                temp_seed = 0;
+            }
             // printf("Failed\n");
             break;
         case GetName:
-            if (elapsed_time >5000){
+            if (elapsed_time > 5000)
+            {
                 serial_state = Command_Wait;
                 state = SetName;
             }
             break;
         case SetName:
             name[chars_received] = '\0';
-            update_high_scores(sequence_length-1);
+            update_high_scores(sequence_length);
             display_high_scores();
 
             chars_received = 0;

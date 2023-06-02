@@ -2,8 +2,7 @@
 
 volatile int8_t octave = 0;
 volatile uint32_t tones[] = {
-    T1, T2, T3, T4
-};
+    T1, T2, T3, T4};
 
 void buzzer_init(void)
 {
@@ -12,7 +11,7 @@ void buzzer_init(void)
     TCA0.SINGLE.CTRLA |= TCA_SINGLE_CLKSEL_DIV1_gc;                              // p274  | TCA_SINGLE_ENABLE_bm
     TCA0.SINGLE.CTRLB = TCA_SINGLE_WGMODE_SINGLESLOPE_gc | TCA_SINGLE_CMP0EN_bm; // p210
     TCA0.SINGLE.CTRLA = TCA_SINGLE_ENABLE_bm;
-    sei();                                                                       // Enable interrupts
+    sei(); // Enable interrupts
 }
 
 void play_tone(uint8_t Index)
@@ -39,4 +38,13 @@ void dec(void)
     {
         tones[i] <<= 1;
     }
+}
+
+void tone_reset(void)
+{
+    octave = 0;
+    tones[0] = T1;
+    tones[1] = T2;
+    tones[2] = T3;
+    tones[3] = T4;
 }

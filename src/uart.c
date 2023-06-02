@@ -10,6 +10,7 @@ extern volatile bool uart_control;
 extern volatile uint32_t tones[];
 extern volatile char name[20];
 
+extern volatile uint32_t temp_seed;
 extern volatile uint32_t init_seed;
 extern volatile uint32_t seed;
 extern volatile uint16_t sequence_len;
@@ -132,12 +133,10 @@ ISR(USART0_RXC_vect)
             break;
         case '0':
         case 'p':
-            octave = 0;
-            tones[0] = T1;
-            tones[1] = T2;
-            tones[2] = T3;
-            tones[3] = T4;
-            seed = init_seed;
+            if (temp_seed)
+                seed = temp_seed;
+
+            // seed = init_seed;
             pb = Reset;
             break;
         case '9':
@@ -147,23 +146,23 @@ ISR(USART0_RXC_vect)
             payload = 0;
             serial_state = Payload_Wait;
             break;
-        case '\0':
-            uart_control = false;
+        default:
             break;
+            // reset the RXdata?
         }
         break;
-        // reset the RXdata?
     case Payload_Wait:
     {
         uint8_t toint = hex_to_int((char)rx_data);
         if (toint != 16)
             payload = (payload << 4) | toint;
         else
-            payload_valid = 0;
+            payload_valid = false;
 
         if (++chars_received == 8)
         {
-            init_seed = payload_valid ? payload : seed;
+            if (payload_valid)
+                temp_seed = payload;
             serial_state = Command_Wait;
         }
         break;

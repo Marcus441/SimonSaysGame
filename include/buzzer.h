@@ -5,3 +5,4 @@ void play_tone(uint8_t Index);
 void tone_stop(void);
 void inc(void);
 void dec(void);
+void tone_reset(void);

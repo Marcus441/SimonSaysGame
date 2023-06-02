@@ -11,6 +11,7 @@ extern volatile uint8_t pb_debounced;
 extern uint8_t digits[];
 
 volatile uint32_t seed = SID;
+volatile uint32_t temp_seed;
 volatile bool uart_control = false;
 volatile uint8_t segs[] = {Spi_Off, Spi_Off};
 volatile GAMESTATES pb = Paused;
@@ -240,8 +241,8 @@ bool runSequence(uint16_t sequenceLength)
             count++;
             if (sequenceLength == count)
             {
-                // printf("SUCCESS\n");
-                // printf("%d\n", sequenceLength);
+                printf("SUCCESS\n");
+                printf("%d\n", sequenceLength);
 
                 display_score(sequenceLength);
                 delay(false);
@@ -263,10 +264,10 @@ bool runSequence(uint16_t sequenceLength)
             break;
         case Fail:
             allow_updating_playback_delay = true;
-            // printf("GAME OVER\n");
-            // printf("%d\n", sequenceLength);
+            printf("GAME OVER\n");
+            printf("%d\n", sequenceLength);
 
-            display_score(sequenceLength - 1);
+            display_score(sequenceLength);
             delay(false);
             segs[0] = Spi_Fail;
             segs[1] = Spi_Fail;
@@ -283,6 +284,7 @@ bool runSequence(uint16_t sequenceLength)
             return false;
         case Reset:
             tone_stop();
+            tone_reset();
 
             segs[0] = Spi_Off;
             segs[1] = Spi_Off;
