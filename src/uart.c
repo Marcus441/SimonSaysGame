@@ -149,7 +149,6 @@ ISR(USART0_RXC_vect)
             break;
         default:
             break;
-            // reset the RXdata?
         }
         break;
     case Payload_Wait:
