@@ -67,6 +67,8 @@ bool runSequence(uint16_t sequenceLength)
         {
         case Paused:
             spi_write(0xFF);
+            // segs[0] = Spi_Off;
+            // segs[1] = Spi_Off;
             uart_control = false;
             pb_released = false;
             break;
@@ -77,9 +79,9 @@ bool runSequence(uint16_t sequenceLength)
             pb_released = false;
 
             tone_stop();
-
-            segs[0] = Spi_Off;
-            segs[1] = Spi_Off;
+            spi_write(0xFF);
+            // segs[0] = Spi_Off;
+            // segs[1] = Spi_Off;
 
             if (pb_falling & PIN4_bm)
                 pb = PB1;
@@ -181,8 +183,9 @@ bool runSequence(uint16_t sequenceLength)
                 segs[0] = Spi_On;
                 segs[1] = Spi_On;
                 delay(false);
-                segs[0] = Spi_Off;
-                segs[1] = Spi_Off;
+                spi_write(0xFF);
+                // segs[0] = Spi_Off;
+                // segs[1] = Spi_Off;
                 display_score(sequenceLength);
                 delay(false);
 
@@ -205,8 +208,9 @@ bool runSequence(uint16_t sequenceLength)
             segs[0] = Spi_Fail;
             segs[1] = Spi_Fail;
             delay(false);
-            segs[0] = Spi_Off;
-            segs[1] = Spi_Off;
+            spi_write(0xFF);
+            // segs[0] = Spi_Off;
+            // segs[1] = Spi_Off;
             display_score(sequenceLength);
             delay(false);
 
@@ -221,9 +225,9 @@ bool runSequence(uint16_t sequenceLength)
             tone_stop();
             tone_reset();
 
-            segs[0] = Spi_Off;
-            segs[1] = Spi_Off;
-
+            spi_write(0xFF);
+            // segs[0] = Spi_Off;
+            // segs[1] = Spi_Off;
             pb = Paused;
             return false;
             break;
