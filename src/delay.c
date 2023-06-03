@@ -21,7 +21,7 @@ uint16_t get_duration(void)
 
 void delay(bool div)
 {
-    uint32_t ms = get_duration();
+    uint32_t ms = playback_time;
     if (div)
         ms >>= 1;
     elapsed_time = 0;
