@@ -67,11 +67,13 @@ bool runSequence(uint16_t sequenceLength)
         {
         case Paused:
             uart_control = false;
+            pb_released = false;
             break;
         case UserInput:
             // uart_control = false; // this is running after our interrupt and ruining our uart control
             elapsed_time = 0;
             allow_updating_playback_delay = false;
+            pb_released = false;
 
             tone_stop();
 
@@ -91,23 +93,25 @@ bool runSequence(uint16_t sequenceLength)
         case PB1:
             play_tone(0);
             segs[0] = SegLeft;
-            //elapsed_time = 0;
+            // elapsed_time = 0;
 
-            if (pb_released == false) // if pressed
+            if ((uart_control == false) & (!pb_released)) // if pressed
             {
-                if (pb_rising & PIN4_bm) // if rising edge (released)
+                // printf("pbreleased = %d\n", pb_released);
+                if ((pb_rising & PIN4_bm)) // if rising edge (released)
                 {
                     pb_released = true; // pb released = true
-                    // tone_stop();
-                    // allow_updating_playback_delay = true;
-                    // pb = step == 0 ? Success : Fail;
                 }
+
+                // printf("%d / %d\n", elapsed_time, playback_time);
             }
-            else if (elapsed_time >= playback_time)
+            else if ((elapsed_time >= playback_time))
             {
+
                 tone_stop();
                 allow_updating_playback_delay = true;
                 pb = step == 0 ? Success : Fail;
+                uart_control = false;
             }
             break;
         case PB2:
@@ -118,7 +122,7 @@ bool runSequence(uint16_t sequenceLength)
                 if (pb_rising & PIN5_bm)
                     pb_released = true;
             }
-            else if (elapsed_time >= playback_time)
+            if (elapsed_time >= playback_time)
             {
                 tone_stop();
                 allow_updating_playback_delay = true;
@@ -134,7 +138,7 @@ bool runSequence(uint16_t sequenceLength)
                 if (pb_rising & PIN6_bm)
                     pb_released = true;
             }
-            else if (elapsed_time >= playback_time)
+            if (elapsed_time >= playback_time)
             {
                 tone_stop();
                 allow_updating_playback_delay = true;
@@ -151,7 +155,7 @@ bool runSequence(uint16_t sequenceLength)
                 if (pb_rising & PIN7_bm)
                     pb_released = true;
             }
-            else if (elapsed_time >= playback_time)
+            if (elapsed_time >= playback_time)
             {
                 tone_stop();
                 allow_updating_playback_delay = true;
@@ -165,7 +169,8 @@ bool runSequence(uint16_t sequenceLength)
             {
                 printf("SUCCESS\n");
                 printf("%d\n", sequenceLength);
-
+                segs[0] = Spi_Off;
+                segs[1] = Spi_Off;
                 segs[0] = Spi_On;
                 segs[1] = Spi_On;
                 delay(false);
@@ -190,6 +195,8 @@ bool runSequence(uint16_t sequenceLength)
             printf("GAME OVER\n");
             printf("%d\n", sequenceLength);
 
+            segs[0] = Spi_Off;
+            segs[1] = Spi_Off;
             segs[0] = Spi_Fail;
             segs[1] = Spi_Fail;
             delay(false);
