@@ -266,8 +266,9 @@ void generate_sequence(uint16_t sequenceLength)
         delay(true);
 
         tone_stop();
-        segs[0] = Spi_Off;
-        segs[1] = Spi_Off;
-        delay(true);
+        spi_write(0xFF);
+        // segs[0] = Spi_Off;
+        // segs[1] = Spi_Off;
+        // delay(true);
     }
 }
