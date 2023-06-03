@@ -154,6 +154,7 @@ bool runSequence(uint16_t sequenceLength)
             break;
         case PB4:
             play_tone(3);
+            segs[1] = SegRight;
             if ((uart_control == false) & (!pb_released)) // if pressed
             {
                 if ((pb_rising & PIN7_bm)) // if rising edge (released)
