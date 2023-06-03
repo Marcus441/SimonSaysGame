@@ -248,20 +248,23 @@ void generate_sequence(uint16_t sequenceLength)
     for (uint16_t i = 0; i < sequenceLength; i++)
     {
         uint8_t step = generate_step(&lfsr_state);
-        play_tone(step);
 
         switch (step)
         {
         case 0:
+            play_tone(0);
             segs[0] = SEG1;
             break;
         case 1:
+            play_tone(1);
             segs[0] = SEG2;
             break;
         case 2:
+            play_tone(2);
             segs[1] = SEG3;
             break;
         case 3:
+            play_tone(3);
             segs[1] = SEG4;
             break;
         }
