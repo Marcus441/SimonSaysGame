@@ -42,7 +42,6 @@ ISR(TCB0_INT_vect)
 ISR(TCB1_INT_vect)
 {
     elapsed_time++;
-
     if (allow_updating_playback_delay)
     {
         playback_time = get_duration();

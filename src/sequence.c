@@ -66,8 +66,7 @@ bool runSequence(uint16_t sequenceLength)
         switch (pb)
         {
         case Paused:
-            segs[0] = Spi_Off;
-            segs[1] = Spi_Off;
+            spi_write(0xFF);
             uart_control = false;
             pb_released = false;
             break;
