@@ -5,11 +5,10 @@
 
 void delay_init(void)
 {
-    cli();
     TCB1.CCMP = 3333;
     TCB1.INTCTRL = TCB_CAPT_bm;
     TCB1.CTRLA = TCB_ENABLE_bm;
-    sei();
+    get_duration();
 }
 
 uint16_t get_duration(void)

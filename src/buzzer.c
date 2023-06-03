@@ -9,12 +9,10 @@ volatile uint32_t tones[] = {
 
 void buzzer_init(void)
 {
-    cli();
     PORTB.DIRSET |= PIN0_bm;
     TCA0.SINGLE.CTRLA |= TCA_SINGLE_CLKSEL_DIV1_gc;                              // p274  | TCA_SINGLE_ENABLE_bm
     TCA0.SINGLE.CTRLB = TCA_SINGLE_WGMODE_SINGLESLOPE_gc | TCA_SINGLE_CMP0EN_bm; // p210
     TCA0.SINGLE.CTRLA = TCA_SINGLE_ENABLE_bm;
-    sei(); // Enable interrupts
 }
 
 void play_tone(uint8_t Index)

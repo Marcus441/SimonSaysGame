@@ -3,9 +3,10 @@
 
 #include "spi.h"
 #include "delay.h"
+
 volatile uint16_t elapsed_time = 0;
-volatile uint16_t playback_time;
-volatile uint16_t new_time;
+volatile uint16_t playback_time = 2000;
+volatile uint16_t new_playback_time = 2000;
 volatile bool allow_updating_playback_delay = false;
 
 extern volatile uint8_t pb_debounced;
@@ -44,7 +45,7 @@ ISR(TCB1_INT_vect)
 
     if (allow_updating_playback_delay)
     {
-        playback_time = new_time;
+        playback_time = get_duration();
         allow_updating_playback_delay = false;
     }
     // new_time = 

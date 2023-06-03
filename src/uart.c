@@ -8,9 +8,11 @@
 extern volatile int8_t octave;
 extern volatile GAMESTATES pb;
 extern volatile GAMESTATES state;
-extern volatile bool uart_control;
 extern volatile uint32_t tones[];
 extern volatile char name[20];
+
+extern volatile bool uart_control;
+extern volatile bool pb_released;
 
 extern volatile uint32_t temp_seed;
 extern volatile uint32_t init_seed;
@@ -20,18 +22,16 @@ extern volatile uint16_t sequence_len;
 volatile SERIAL_STATE serial_state = Command_Wait;
 volatile uint8_t chars_received = 0;
 
+static FILE mystdout = FDEV_SETUP_STREAM(uart_putc_printf, NULL, _FDEV_SETUP_WRITE);
 
 void uart_init(void)
 {
-    static FILE mystdout = FDEV_SETUP_STREAM(uart_putc_printf, NULL, _FDEV_SETUP_WRITE);
-    stdout = &mystdout;
 
-    cli();
     PORTB.DIRSET |= PIN2_bm; // Enable PB2 as output (USART0 TXD)
     USART0.CTRLA = USART_RXCIE_bm;
     USART0.BAUD = 1389;                           // 9600 baud @ 3.3 MHz
     USART0.CTRLB = USART_RXEN_bm | USART_TXEN_bm; // Enable Tx/Rx
-    sei();
+    stdout = &mystdout;
 }
 
 uint8_t uart_getc(void)
@@ -90,6 +90,7 @@ ISR(USART0_RXC_vect)
             {
                 pb = PB1;
                 uart_control = true;
+                pb_released = true;
             }
             break;
         case '2':
@@ -98,6 +99,7 @@ ISR(USART0_RXC_vect)
             {
                 pb = PB2;
                 uart_control = true;
+                pb_released = true;
             }
             break;
         case '3':
@@ -106,6 +108,7 @@ ISR(USART0_RXC_vect)
             {
                 pb = PB3;
                 uart_control = true;
+                pb_released = true;
             }
             break;
         case '4':
@@ -114,6 +117,7 @@ ISR(USART0_RXC_vect)
             {
                 pb = PB4;
                 uart_control = true;
+                pb_released = true;
             }
             break;
         case ',':

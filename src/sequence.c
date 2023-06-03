@@ -13,9 +13,11 @@ extern uint8_t digits[];
 
 volatile uint32_t seed = SID;
 volatile uint32_t temp_seed;
-volatile bool uart_control = false;
 volatile uint8_t segs[] = {Spi_Off, Spi_Off};
 volatile GAMESTATES pb = Paused;
+
+volatile bool uart_control = false;
+volatile bool pb_released = false;
 
 uint8_t generate_step(uint32_t *state)
 {
@@ -33,7 +35,8 @@ uint8_t generate_step(uint32_t *state)
 void display_score(uint16_t score)
 {
     segs[0] = Spi_Off;
-    if (score > 9){
+    if (score > 9)
+    {
         segs[0] = digits[score % 100 / 10];
     }
     segs[1] = digits[score % 10];
@@ -50,7 +53,7 @@ bool runSequence(uint16_t sequenceLength)
     uint8_t pb_sample_r = 0xFF;
     uint8_t pb_changed, pb_rising, pb_falling;
 
-    allow_updating_playback_delay = true;
+    // allow_updating_playback_delay = true;
     while (1)
     {
         pb_sample_r = pb_sample;
@@ -59,6 +62,7 @@ bool runSequence(uint16_t sequenceLength)
 
         pb_falling = pb_changed & pb_sample_r;
         pb_rising = pb_changed & pb_sample;
+        allow_updating_playback_delay = true;
 
         switch (pb)
         {
@@ -76,27 +80,20 @@ bool runSequence(uint16_t sequenceLength)
             segs[1] = Spi_Off;
 
             if (pb_falling & PIN4_bm)
-            {
                 pb = PB1;
-                // printf("PB1 Pressed\n");
-            }
+            // printf("PB1 Pressed\n");
             else if (pb_falling & PIN5_bm)
-            {
                 pb = PB2;
-                // printf("PB2 Pressed\n");
-            }
+            // printf("PB2 Pressed\n");
             else if (pb_falling & PIN6_bm)
-            {
                 pb = PB3;
-                // printf("PB3 Pressed\n");
-            }
+            // printf("PB3 Pressed\n");
             else if (pb_falling & PIN7_bm)
-            {
                 pb = PB4;
-                // printf("PB4 Pressed\n");
-            }
+            // printf("PB4 Pressed\n");
+
             break;
-        allow_updating_playback_delay = false;
+            allow_updating_playback_delay = false;
         case PB1:
             play_tone(0);
             segs[0] = SegLeft;
@@ -184,7 +181,8 @@ bool runSequence(uint16_t sequenceLength)
                 {
                     pb = Fail;
                 }
-            }else if (uart_control == true) // runs when a button is pressed
+            }
+            else if (uart_control == true) // runs when a button is pressed
             {
                 if (elapsed_time >= get_duration())
                 {
@@ -206,7 +204,7 @@ bool runSequence(uint16_t sequenceLength)
         case PB4:
             play_tone(3);
             segs[1] = SegRight;
-            
+
             if (pb_rising & PIN7_bm) //
             {
                 uart_control = false;
@@ -219,7 +217,8 @@ bool runSequence(uint16_t sequenceLength)
                 {
                     pb = Fail;
                 }
-            } else if (uart_control == true) // runs when a button is pressed
+            }
+            else if (uart_control == true) // runs when a button is pressed
             {
                 if (elapsed_time >= get_duration())
                 {
@@ -252,7 +251,7 @@ bool runSequence(uint16_t sequenceLength)
                 segs[1] = Spi_Off;
                 display_score(sequenceLength);
                 delay(true);
-                
+
                 // printf("success state\n");
                 pb = Paused;
                 return true;
@@ -276,7 +275,6 @@ bool runSequence(uint16_t sequenceLength)
             segs[1] = Spi_Off;
             display_score(sequenceLength);
             delay(true);
-            
 
             count++;
             for (; count < sequenceLength; count++)

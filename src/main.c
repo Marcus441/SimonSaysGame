@@ -26,15 +26,15 @@ volatile uint16_t sequence_length;
 
 int main(void)
 {
+    cli();
     uart_init();
     spi_init();
     buttons_init();
     buzzer_init();
     adc_init();
     delay_init();
-    //get_duration();
-    
-    // printf("Game Start\n");
+    sei();    
+
     state = sequence_start;
 
     bool outcome;
