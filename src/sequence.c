@@ -66,6 +66,8 @@ bool runSequence(uint16_t sequenceLength)
         switch (pb)
         {
         case Paused:
+            segs[0] = Spi_Off;
+            segs[1] = Spi_Off;
             uart_control = false;
             pb_released = false;
             break;
@@ -93,17 +95,13 @@ bool runSequence(uint16_t sequenceLength)
         case PB1:
             play_tone(0);
             segs[0] = SegLeft;
-            // elapsed_time = 0;
 
             if ((uart_control == false) & (!pb_released)) // if pressed
             {
-                // printf("pbreleased = %d\n", pb_released);
                 if ((pb_rising & PIN4_bm)) // if rising edge (released)
                 {
                     pb_released = true; // pb released = true
                 }
-
-                // printf("%d / %d\n", elapsed_time, playback_time);
             }
             else if ((elapsed_time >= playback_time))
             {
@@ -117,49 +115,59 @@ bool runSequence(uint16_t sequenceLength)
         case PB2:
             play_tone(1);
             segs[0] = SegRight;
-            if (pb_released == false)
+            if ((uart_control == false) & (!pb_released)) // if pressed
             {
-                if (pb_rising & PIN5_bm)
-                    pb_released = true;
+                if ((pb_rising & PIN5_bm)) // if rising edge (released)
+                {
+                    pb_released = true; // pb released = true
+                }
             }
-            if (elapsed_time >= playback_time)
+            else if ((elapsed_time >= playback_time))
             {
+
                 tone_stop();
                 allow_updating_playback_delay = true;
                 pb = step == 1 ? Success : Fail;
+                uart_control = false;
             }
 
             break;
         case PB3:
             play_tone(2);
             segs[1] = SegLeft;
-            if (pb_released == false)
+            if ((uart_control == false) & (!pb_released)) // if pressed
             {
-                if (pb_rising & PIN6_bm)
-                    pb_released = true;
+                if ((pb_rising & PIN6_bm)) // if rising edge (released)
+                {
+                    pb_released = true; // pb released = true
+                }
             }
-            if (elapsed_time >= playback_time)
+            else if ((elapsed_time >= playback_time))
             {
+
                 tone_stop();
                 allow_updating_playback_delay = true;
                 pb = step == 2 ? Success : Fail;
+                uart_control = false;
             }
 
             break;
         case PB4:
             play_tone(3);
-            segs[1] = SegRight;
-
-            if (pb_released == false)
+            if ((uart_control == false) & (!pb_released)) // if pressed
             {
-                if (pb_rising & PIN7_bm)
-                    pb_released = true;
+                if ((pb_rising & PIN7_bm)) // if rising edge (released)
+                {
+                    pb_released = true; // pb released = true
+                }
             }
-            if (elapsed_time >= playback_time)
+            else if ((elapsed_time >= playback_time))
             {
+
                 tone_stop();
                 allow_updating_playback_delay = true;
                 pb = step == 3 ? Success : Fail;
+                uart_control = false;
             }
             break;
         case Success:
@@ -169,8 +177,7 @@ bool runSequence(uint16_t sequenceLength)
             {
                 printf("SUCCESS\n");
                 printf("%d\n", sequenceLength);
-                segs[0] = Spi_Off;
-                segs[1] = Spi_Off;
+
                 segs[0] = Spi_On;
                 segs[1] = Spi_On;
                 delay(false);
@@ -195,8 +202,6 @@ bool runSequence(uint16_t sequenceLength)
             printf("GAME OVER\n");
             printf("%d\n", sequenceLength);
 
-            segs[0] = Spi_Off;
-            segs[1] = Spi_Off;
             segs[0] = Spi_Fail;
             segs[1] = Spi_Fail;
             delay(false);
