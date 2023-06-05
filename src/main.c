@@ -19,7 +19,7 @@ extern volatile uint8_t chars_received;
 high_score_t highScores[5];
 extern volatile SERIAL_STATE serial_state;
 
-volatile uint32_t init_seed = SID;
+extern volatile uint32_t init_seed;
 extern volatile uint32_t seed;
 extern volatile uint32_t temp_seed;
 volatile uint16_t sequence_length;
@@ -47,25 +47,21 @@ int main(void)
         case sequence_start:
             generate_sequence(sequence_length);
             state = UserInput;
-            // printf("Users Turn\n");
             break;
         case UserInput:
             outcome = runSequence(sequence_length);
             if (outcome)
             {
                 state = Success;
-                // printf("State = Success\n");
             }
             else if (outcome == false)
             {
                 state = Fail;
-                // printf("State = Failed\n");
             }
             break;
         case Success:
             sequence_length++;
             state = sequence_start;
-            // printf("Success\n");
             break;
         case Fail:
             for (uint8_t i = 0; i < 5; i++)
@@ -89,7 +85,6 @@ int main(void)
                 seed = temp_seed;
                 temp_seed = 0;
             }
-            // printf("Failed\n");
             break;
         case GetName:
             if (elapsed_time > 5000)

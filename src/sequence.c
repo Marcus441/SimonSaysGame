@@ -8,11 +8,14 @@
 #include "timer.h"
 #include "delay.h"
 #include "states.h"
+
+
 extern volatile uint8_t pb_debounced;
 extern uint8_t digits[];
 
 volatile uint32_t seed = SID;
 volatile uint32_t temp_seed;
+volatile uint32_t init_seed = SID;
 volatile uint8_t segs[] = {Spi_Off, Spi_Off};
 volatile GAMESTATES pb = Paused;
 
@@ -212,10 +215,10 @@ bool runSequence(uint16_t sequenceLength)
             delay(false);
             // display score
             display_score(sequenceLength);
-            delay(true);
+            delay(true); //delay div 2
             segs[0] = Spi_Off;
             segs[1] = Spi_Off;
-            delay(true);
+            delay(true); //delay div 2
 
             count++;
             for (; count < sequenceLength; count++)
@@ -253,19 +256,19 @@ void generate_sequence(uint16_t sequenceLength)
         {
         case 0:
             play_tone(0);
-            segs[0] = SEG1;
+            segs[0] = SegLeft;
             break;
         case 1:
             play_tone(1);
-            segs[0] = SEG2;
+            segs[0] = SegRight;
             break;
         case 2:
             play_tone(2);
-            segs[1] = SEG3;
+            segs[1] = SegLeft;
             break;
         case 3:
             play_tone(3);
-            segs[1] = SEG4;
+            segs[1] = SegRight;
             break;
         }
 
