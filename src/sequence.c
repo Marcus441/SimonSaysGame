@@ -9,7 +9,6 @@
 #include "delay.h"
 #include "states.h"
 
-
 extern volatile uint8_t pb_debounced;
 extern uint8_t digits[];
 
@@ -37,11 +36,23 @@ uint8_t generate_step(uint32_t *state)
 
 void display_score(uint16_t score)
 {
-    segs[0] = Spi_Off;
     if (score > 9)
     {
-        segs[0] = digits[score % 100 / 10];
+        uint8_t mod = score % 100;
+        uint8_t quotient = 0;
+
+        while (mod > 9)
+        {
+            mod -= 10;
+            quotient++;
+        }
+        segs[0] = digits[quotient];
     }
+    else
+    {
+        segs[0] = Spi_Off;
+    }
+
     segs[1] = digits[score % 10];
 }
 
@@ -215,10 +226,10 @@ bool runSequence(uint16_t sequenceLength)
             delay(false);
             // display score
             display_score(sequenceLength);
-            delay(true); //delay div 2
+            delay(true); // delay div 2
             segs[0] = Spi_Off;
             segs[1] = Spi_Off;
-            delay(true); //delay div 2
+            delay(true); // delay div 2
 
             count++;
             for (; count < sequenceLength; count++)

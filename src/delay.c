@@ -3,7 +3,7 @@
 
 #include "timer.h"
 
-#define ADC8bit 6.8359375
+#define ADC8bit (1750 >> 8) // 1750/256
 
 void delay_init(void)
 {
