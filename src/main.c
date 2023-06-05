@@ -19,9 +19,11 @@ extern volatile uint8_t chars_received;
 high_score_t highScores[5];
 extern volatile SERIAL_STATE serial_state;
 
+
 extern volatile uint32_t init_seed;
 extern volatile uint32_t seed;
 extern volatile uint32_t temp_seed;
+
 volatile uint16_t sequence_length;
 
 int main(void)
