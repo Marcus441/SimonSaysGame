@@ -38,8 +38,8 @@ int main(void)
     sei();    
 
     state = sequence_start;
-    int duration = get_duration();
-    printf("duration: %d\n", duration);
+    // int duration = get_duration();
+    // printf("duration: %d\n", duration);
     bool outcome;
     uint16_t sequence_length = 1;
     
