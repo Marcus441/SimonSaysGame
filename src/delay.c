@@ -24,8 +24,8 @@ uint16_t get_duration(void)
     uint16_t duration = (result * (7)) + MIN_DURATION;
     // float position = (float)(result/255.0);
     // printf("position: %.2f, duration: %d\n", position, duration >> 1);
-    if (duration == 2035)
-        duration -= 35;
+    if (duration >= 2000)
+        duration = 2000;
     return duration;
 }
 
