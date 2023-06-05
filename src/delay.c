@@ -18,7 +18,7 @@ void delay_init(void)
 uint16_t get_duration(void)
 {
     uint16_t result = ADC0.RESULT;
-    uint16_t duration = (result * 7) + ((uint16_t)(result * 7) >> 8) + MIN_DURATION; //
+    uint16_t duration = (result * ADC8bit) + ((uint16_t)(result * ADC8bit) >> 8) + MIN_DURATION; //
     //printf("%d\n", duration);
     return duration;
 }
