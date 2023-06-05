@@ -10,6 +10,8 @@
         "timer.h": "c",
         "buzzer.h": "c",
         "states.h": "c",
-        "delay.h": "c"
+        "delay.h": "c",
+        "adc.h": "c",
+        "io.h": "c"
     }
 }

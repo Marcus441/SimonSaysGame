@@ -2,8 +2,10 @@
 #include "delay.h"
 
 #include "timer.h"
-
-#define ADC8bit (1750 >> 8) // 1750/256
+#define ADC8bit 6.8359375 // 1750/256
+#define ADC_RESOLUTION 256
+#define MIN_DURATION 250
+#define MAX_DURATION 2000
 
 void delay_init(void)
 {
@@ -16,11 +18,10 @@ void delay_init(void)
 uint16_t get_duration(void)
 {
     uint16_t result = ADC0.RESULT;
-    uint16_t duration = (result * ADC8bit) + ((int16_t)(result * ADC8bit) >> 8) + 250;
-    // printf("%d", duration);
+    uint16_t duration = (result * 7) + ((uint16_t)(result * 7) >> 8) + MIN_DURATION; //
+    printf("%d\n", duration);
     return duration;
 }
-
 void delay(bool div)
 {
     uint32_t ms = get_duration();
