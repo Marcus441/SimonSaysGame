@@ -12,15 +12,18 @@ void delay_init(void)
     TCB1.CCMP = 3333;
     TCB1.INTCTRL = TCB_CAPT_bm;
     TCB1.CTRLA = TCB_ENABLE_bm;
-    get_duration();
+    // get_duration();
 }
 
 uint16_t get_duration(void)
 {
+    while (!(ADC0.INTFLAGS & ADC_RESRDY_bm))
+        ;
     uint16_t result = ADC0.RESULT;
     // uint16_t duration = (result * ADC8bit) + ((int16_t)(result * ADC8bit) >> 8) + 250;
     uint16_t duration = (result * 7) + MIN_DURATION;
-    //printf("result: %d, duration: %d\n", result, duration);
+    // float position = (float)(result/255.0);
+    // printf("position: %.2f, duration: %d\n", position, duration >> 1);
     return duration;
 }
 
