@@ -1,23 +1,14 @@
 #include "headers.h"
 #include "uart.h"
+#include "sequence.h"
 
 #include "buzzer.h"
-#include "states.h"
 #include "timer.h"
+#include "sequence.h"
+#include "states.h"
 
-extern volatile int8_t octave;
-extern volatile GAMESTATES pb;
-extern volatile GAMESTATES state;
-extern volatile uint32_t tones[];
+//extern volatile GAMESTATES state;
 extern volatile char name[20];
-
-extern volatile bool uart_control;
-extern volatile bool pb_released;
-
-extern volatile uint32_t temp_seed;
-extern volatile uint32_t init_seed;
-extern volatile uint32_t seed;
-extern volatile uint16_t sequence_len;
 
 volatile SERIAL_STATE serial_state = Command_Wait;
 volatile uint8_t chars_received = 0;

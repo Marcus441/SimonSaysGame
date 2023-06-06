@@ -9,8 +9,6 @@
 #include "delay.h"
 #include "states.h"
 
-extern volatile uint8_t pb_debounced;
-extern uint8_t digits[];
 
 volatile uint32_t seed = SID;
 volatile uint32_t temp_seed;

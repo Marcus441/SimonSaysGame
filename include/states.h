@@ -21,9 +21,6 @@ typedef enum
     SetName
 } GAMESTATES;
 
-typedef struct
-{
-    char name[20];
-    uint16_t HighScore;
-} high_score_t;
-
+extern volatile GAMESTATES state;
+extern volatile GAMESTATES pb;
+extern volatile SERIAL_STATE serial_state;

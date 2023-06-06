@@ -1,3 +1,6 @@
+#include "headers.h"
+#include "states.h"
+
 #include "uart.h"
 #include "sequence.h"
 #include "spi.h"
@@ -5,7 +8,6 @@
 #include "buzzer.h"
 #include "adc.h"
 #include "delay.h"
-#include "states.h"
 #include "timer.h"
 
 void update_high_scores(uint16_t score);
@@ -14,16 +16,14 @@ void display_high_scores();
 volatile GAMESTATES state;
 
 volatile char name[20];
-extern volatile uint8_t chars_received;
+
+typedef struct
+{
+    char name[20];
+    uint16_t HighScore;
+} high_score_t;
 
 high_score_t highScores[5];
-extern volatile SERIAL_STATE serial_state;
-
-
-extern volatile uint32_t init_seed;
-extern volatile uint32_t seed;
-extern volatile uint32_t temp_seed;
-
 volatile uint16_t sequence_length;
 
 int main(void)
@@ -38,8 +38,7 @@ int main(void)
     sei();    
 
     state = sequence_start;
-    int duration = get_duration();
-    printf("duration: %d\n", duration);
+
     bool outcome;
     uint16_t sequence_length = 1;
     

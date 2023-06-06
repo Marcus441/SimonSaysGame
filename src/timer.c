@@ -1,6 +1,9 @@
-#include "buttons.h"
 #include "timer.h"
 
+#include "sequence.h"
+#include "headers.h"
+#include "buttons.h"
+#include "headers.h"
 #include "spi.h"
 #include "delay.h"
 
@@ -9,8 +12,7 @@ volatile uint16_t playback_time;
 volatile uint16_t new_playback_time;
 volatile bool allow_updating_playback_delay = false;
 
-extern volatile uint8_t pb_debounced;
-extern uint8_t segs[];
+
 // Timer ISR; samples pushbuttons
 ISR(TCB0_INT_vect)
 {

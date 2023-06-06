@@ -24,7 +24,3 @@
 #define T3 6720
 #define T4 17941
 
-// #define T1 0
-// #define T2 0
-// #define T3 0
-// #define T4 0
