@@ -19,13 +19,12 @@ uint16_t get_duration(void)
 {
     while (!(ADC0.INTFLAGS & ADC_RESRDY_bm))
         ;
-    uint32_t result = ADC0.RESULT;
     // uint16_t duration = (result * ADC8bit) + ((int16_t)(result * ADC8bit) >> 8) + 250;
-    uint16_t duration = (result * (7)) + MIN_DURATION;
-    // float position = (float)(result/255.0);
-    // printf("position: %.2f, duration: %d\n", position, duration >> 1);
-    if (duration >= 2000)
-        duration = 2000;
+    uint32_t result = ADC0.RESULT;
+    uint16_t duration = (result * ADC8bit) + MIN_DURATION;
+    //printf("position: %d, duration: %d\n", result, duration/2);
+    // if (duration >= 2000)
+    //     duration = 2000;
     return duration;
 }
 
