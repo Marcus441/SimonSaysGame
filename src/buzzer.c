@@ -25,17 +25,25 @@ void tone_stop(void)
 
 void inc(void)
 {
-    for (size_t i = 0; i <= 3; i++) // Shift all tones one octave up
+    if (octave < 3) // Check if octave is not max
     {
-        tones[i] >>= 1; // Divide by 2
+        for (size_t i = 0; i <= 3; i++) // Shift all tones one octave up
+        {
+            tones[i] >>= 1; // Divide by 2
+        }
+        octave++; // Increment octave
     }
 }
 
 void dec(void)
 {
-    for (size_t i = 0; i <= 3; i++) // Shift all tones one octave down
+    if (octave > -2) // Check if octave is not min
     {
-        tones[i] <<= 1; // Multiply by 2
+        for (size_t i = 0; i <= 3; i++) // Shift all tones one octave down
+        {
+            tones[i] <<= 1; // Multiply by 2
+        }
+        octave--; // Decrement octave
     }
 }
 

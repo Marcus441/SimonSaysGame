@@ -112,19 +112,15 @@ ISR(USART0_RXC_vect)
             break;
         case ',':
         case 'k':
-            if (octave < 3)
-            {
-                octave++;
-                inc();
-            }
+
+            inc();
+
             break;
         case '.':
         case 'l':
-            if (octave > -2)
-            {
-                octave--;
-                dec();
-            }
+
+            dec();
+
             break;
         case '0':
         case 'p':
