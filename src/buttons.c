@@ -1,7 +1,7 @@
 #include "headers.h"
 #include "buttons.h"
 
-volatile uint8_t pb_debounced;
+volatile uint8_t pb_debounced; // debounced pushbutton state
 
 void buttons_init(void)
 {

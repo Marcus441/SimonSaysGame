@@ -2,38 +2,34 @@
 #include "delay.h"
 
 #include "timer.h"
-#define ADC8bit 6.8359375 // 1750/256
-#define ADC_RESOLUTION 256
-#define MIN_DURATION 250
-#define MAX_DURATION 2000
+
+#define ADC8bit 6.8359375  // 1750 / 256 (frequency range / resolution)
+#define ADC_RESOLUTION 256 // 8-bit resolution
+#define MIN_DURATION 250   // 250ms
+#define MAX_DURATION 2000  // 2000ms
 
 void delay_init(void)
 {
-    TCB1.CCMP = 3333;
-    TCB1.INTCTRL = TCB_CAPT_bm;
-    TCB1.CTRLA = TCB_ENABLE_bm;
-    // get_duration();
+    TCB1.CCMP = 3333;           // Set interval for 1ms (3333 clocks @ 3.3 MHz)
+    TCB1.INTCTRL = TCB_CAPT_bm; // CAPT interrupt enable
+    TCB1.CTRLA = TCB_ENABLE_bm; // enable TCB1
 }
 
 uint16_t get_duration(void)
 {
-    while (!(ADC0.INTFLAGS & ADC_RESRDY_bm))
+    while (!(ADC0.INTFLAGS & ADC_RESRDY_bm)) // wait for ADC conversion to finish
         ;
-    // uint16_t duration = (result * ADC8bit) + ((int16_t)(result * ADC8bit) >> 8) + 250;
-    uint32_t result = ADC0.RESULT;
-    uint16_t duration = (result * ADC8bit) + MIN_DURATION;
-    //printf("position: %d, duration: %d\n", result, duration/2);
-    // if (duration >= 2000)
-    //     duration = 2000;
-    return duration;
+    uint32_t result = ADC0.RESULT;                         // read ADC result
+    uint16_t duration = (result * ADC8bit) + MIN_DURATION; // convert ADC result to duration
+    return duration;                                       // return duration
 }
 
 void delay(bool div)
 {
-    uint32_t ms = get_duration();
-    if (div)
-        ms >>= 1;
-    elapsed_time = 0;
-    while (elapsed_time < ms)
+    uint32_t ms = get_duration(); // get duration
+    if (div)                      // if div is true
+        ms >>= 1;                 // divide duration by 2
+    elapsed_time = 0;             // reset elapsed time
+    while (elapsed_time < ms)     // wait for elapsed time to reach duration
         ;
 }

@@ -13,18 +13,18 @@
 void update_high_scores(uint16_t score);
 void display_high_scores();
 
-volatile GAMESTATES state;
+volatile GAMESTATES state; // declare state variable
 
-volatile char name[20];
+volatile char name[20]; // declare name variable
 
-typedef struct
+typedef struct // declare player struct
 {
-    char name[20];
-    uint16_t HighScore;
-} high_score_t;
+    char name[20];      // declare name variable
+    uint16_t HighScore; // declare high score variable
+} player_t;             // declare player struct
 
-high_score_t highScores[5];
-volatile uint16_t sequence_length;
+player_t highScores[5];            // declare high score array of structs with 5 elements
+volatile uint16_t sequence_length; // declare sequence length variable
 
 int main(void)
 {
@@ -106,8 +106,8 @@ int main(void)
             break;
         default:
             break;
-        }
-    }
+        } // end state machine
+    }     // end game loop
 }
 
 void update_high_scores(uint16_t score)

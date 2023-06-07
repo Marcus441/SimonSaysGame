@@ -1,9 +1,8 @@
 #include "headers.h"
 #include "buzzer.h"
 
-volatile int8_t octave = 0;
-volatile uint32_t tones[] = {
-    T1, T2, T3, T4};
+volatile int8_t octave = 0;                   // Octave offset
+volatile uint32_t tones[] = {T1, T2, T3, T4}; // Array of tones
 
 void buzzer_init(void)
 {

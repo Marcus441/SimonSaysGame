@@ -3,7 +3,7 @@ typedef enum
     Command_Wait,
     Payload_Wait,
     uart_GetName
-} SERIAL_STATE;
+} SERIAL_STATE; // serial state machine states
 
 typedef enum
 {
@@ -19,8 +19,8 @@ typedef enum
     Paused,
     GetName,
     SetName
-} GAMESTATES;
+} GAMESTATES; // game state machine states
 
-extern volatile GAMESTATES state;
-extern volatile GAMESTATES pb;
-extern volatile SERIAL_STATE serial_state;
+extern volatile GAMESTATES state;          // declare state variable
+extern volatile GAMESTATES pb;             // declare pushbutton variable
+extern volatile SERIAL_STATE serial_state; // declare serial state variable
