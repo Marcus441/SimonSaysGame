@@ -7,7 +7,6 @@
 #include "sequence.h"
 #include "states.h"
 
-//extern volatile GAMESTATES state;
 extern volatile char name[20];
 
 volatile SERIAL_STATE serial_state = Command_Wait;

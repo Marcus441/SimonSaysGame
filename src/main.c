@@ -28,81 +28,81 @@ volatile uint16_t sequence_length;
 
 int main(void)
 {
-    cli();
-    uart_init();
-    spi_init();
-    buttons_init();
-    buzzer_init();
-    adc_init();
-    delay_init();
-    sei();    
+    cli();          // clear global interrupts
+    uart_init();    // initialize UART
+    spi_init();     // initialize SPI
+    buttons_init(); // initialize buttons
+    buzzer_init();  // initialize buzzer
+    adc_init();     // initialize ADC
+    delay_init();   // initialize delay
+    sei();          // enable global interrupts
 
-    state = sequence_start;
+    state = sequence_start; // set initial state
 
-    bool outcome;
-    uint16_t sequence_length = 1;
-    
-    while (1)
+    bool outcome;                 // = false;
+    uint16_t sequence_length = 1; // set initial sequence length
+
+    while (1) // game loop
     {
-        switch (state)
+        switch (state) // begin state machine
         {
         case sequence_start:
-            generate_sequence(sequence_length);
-            state = UserInput;
+            generate_sequence(sequence_length); // generate sequence on spi
+            state = UserInput;                  // set state to user input
             break;
         case UserInput:
-            outcome = runSequence(sequence_length);
-            if (outcome)
+            outcome = runSequence(sequence_length); // user performs sequence, returns true if correct
+            if (outcome)                            // if correct
             {
-                state = Success;
+                state = Success; // move to success state
             }
-            else if (outcome == false)
+            else if (outcome == false) // if incorrect
             {
-                state = Fail;
+                state = Fail; // move to fail state
             }
             break;
         case Success:
-            sequence_length++;
-            state = sequence_start;
+            sequence_length++;      // increment sequence length on success
+            state = sequence_start; // move to sequence start state to begin new sequence
             break;
         case Fail:
-            for (uint8_t i = 0; i < 5; i++)
+            for (uint8_t i = 0; i < 5; i++) // check if score is high score
             {
-                if (sequence_length > highScores[i].HighScore)
+                if (sequence_length > highScores[i].HighScore) // if score is high score
                 {
                     printf("Enter name: ");
-                    serial_state = uart_GetName;
-                    state = GetName;
+                    serial_state = uart_GetName; // set serial state to get name
+                    state = GetName;             // set state to get name
                     break;
                 }
             }
-            if (state != GetName)
+            if (state != GetName) // if score is not high score
             {
-                display_high_scores();
-                state = sequence_start;
+                display_high_scores();  // display high scores
+                state = sequence_start; // move to sequence start state to begin new sequence
             }
 
-            if (temp_seed)
+            if (temp_seed) // if temp_seed is not 0
             {
-                seed = temp_seed;
-                temp_seed = 0;
+                seed = temp_seed; // set seed to temp_seed
+                temp_seed = 0;    // set temp_seed to 0
             }
             break;
         case GetName:
-            if (elapsed_time > 5000)
+            if (elapsed_time > 5000) // if 5 seconds have passed
             {
-                serial_state = Command_Wait;
-                state = SetName;
+                serial_state = Command_Wait; // set serial state to command wait
+                state = SetName;             // set state to set name
             }
             break;
         case SetName:
-            name[chars_received] = '\0';
-            update_high_scores(sequence_length);
-            display_high_scores();
+            name[chars_received] = '\0';         // set last character of name to null terminator
+            update_high_scores(sequence_length); // update high scores table
+            display_high_scores();               // display high scores table in uart
 
-            chars_received = 0;
-            sequence_length = 1;
-            state = sequence_start;
+            chars_received = 0;     // reset chars_received
+            sequence_length = 1;    // reset sequence_length
+            state = sequence_start; // begin new sequence
             break;
         default:
             break;
@@ -112,28 +112,28 @@ int main(void)
 
 void update_high_scores(uint16_t score)
 {
-    for (uint8_t i = 0; i < 5; i++)
+    for (uint8_t i = 0; i < 5; i++) // iterate through high scores
     {
-        if (score > highScores[i].HighScore)
+        if (score > highScores[i].HighScore) // if score is greater than current high score
         {
-            for (uint8_t j = 4; j > i; j--)
+            for (uint8_t j = 4; j > i; j--) // shift high scores down
                 highScores[j] = highScores[j - 1];
 
-            for (uint8_t j = 0; j < 20; j++)
+            for (uint8_t j = 0; j < 20; j++) // copy name to high scores
                 highScores[i].name[j] = name[j];
-            highScores[i].HighScore = score;
-            break;
+            highScores[i].HighScore = score; // set high score
+            break;                           // break out of loop
         }
     }
 }
 
 void display_high_scores()
 {
-    for (uint8_t i = 0; i < 5; i++)
+    for (uint8_t i = 0; i < 5; i++) // iterate through high scores
     {
-        if (highScores[i].HighScore == 0)
-            break;
+        if (highScores[i].HighScore == 0) // if high score is 0
+            break;                        // break out of loop
 
-        printf("%s %d\n", highScores[i].name, highScores[i].HighScore);
+        printf("%s %d\n", highScores[i].name, highScores[i].HighScore); // print high score
     }
 }

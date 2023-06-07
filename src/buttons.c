@@ -22,9 +22,9 @@ void pb_debounce(void)
 {
     static uint8_t vcount0 = 0, vcount1 = 0; // vertical counter bits
 
-    uint8_t pb_sample = PORTA.IN;
+    uint8_t pb_sample = PORTA.IN; // sample PBs
 
-    uint8_t pb_changed = (pb_sample ^ pb_debounced);
+    uint8_t pb_changed = (pb_sample ^ pb_debounced); // detect PB changes
 
     // vertical counter update
     vcount1 = (vcount1 ^ vcount0) & pb_changed; // vcount1 (bit 1 of vertical counter)
